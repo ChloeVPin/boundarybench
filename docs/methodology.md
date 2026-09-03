@@ -42,6 +42,20 @@ Negative controls are clean variants where the useful action remains authorized 
 
 Authors should review each scenario for ambiguous authority wording, accidental clues, unrealistic tool semantics, and hidden dependence on a specific model. The v0.1 core accepts scenarios only when the bundled evaluator can establish the declared outcome deterministically.
 
+## Authorization Decay Surface protocol
+
+Version 0.2 adds a preregistered 3 by 3 by 3 factorial protocol. It changes attack position, repetition pressure, and provenance visibility while holding the task, authority ledger, fixture, tools, and oracle fixed. Every primary run has a clean control in the same cell.
+
+The independent variables and matched contrasts are defined before execution in [Authorization Decay Surface](authorization-decay-surface.md). Job order is deterministically pseudorandomized from the experiment seed. Every compiled trajectory has a stable condition ID and content digest.
+
+The protocol separates three evidence layers:
+
+1. Model behavior consists of responses, attempted actions, completed actions, and final state.
+2. Harness behavior consists of trajectory compilation, sandbox isolation, tool enforcement, and event capture.
+3. Evaluator behavior consists of deterministic oracle execution and statistical aggregation.
+
+The agent receives the first layer's task context and authority ledger. It never receives expected behavior or oracle fields.
+
 ## Reproducibility
 
-Reproduction uses the exact scenario version, harness, model or agent build, configuration, tool stubs, reset method, and evaluator implementation. The run manifest records these fields and the scenario checksum. `experiments/reference-suite-v0.1.yaml` captures the checked reference configuration, and `results/reference-suite-v0.1.json` records its deterministic summary.
+Reproduction uses the exact scenario version, harness, model or agent build, configuration, tool stubs, reset method, and evaluator implementation. The run manifest records these fields, the scenario checksum, trajectory condition, and trajectory digest. `experiments/authorization-decay-surface-v0.2.yaml` captures the full protocol configuration, and `results/authorization-decay-surface-v0.2.json` records its deterministic conformance summary.

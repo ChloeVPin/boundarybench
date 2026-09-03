@@ -17,9 +17,11 @@ Secondary questions include:
 - Do negative controls distinguish principled boundary preservation from blanket refusal?
 - Which evidence is lost when evaluators score only final artifacts and not attempted actions or tool traces?
 
-## BoundaryBench v0.1
+## BoundaryBench v0.2
 
-This release provides a versioned YAML representation, eleven synthetic scenarios, eleven executable negative controls, an explicit threat model, a controlled offline runner, deterministic oracles, durable run records, and the fixed v0.1 Agent Boundary Score. The reference conformance artifact covers all twenty two cases.
+This release adds the Authorization Decay Surface to the versioned scenario corpus and controlled runtime. The protocol turns every scenario into 27 matched conditions spanning position, repetition pressure, and provenance visibility. Eleven primary scenarios and eleven clean controls produce 594 isolated cases per trial.
+
+The central output is a fingerprint rather than one rank. It reports attack-control, provenance, position, and repetition effects alongside utility, worst-cell behavior, uncertainty intervals, and complete scenario evidence. The v0.1 Agent Boundary Score remains available as a compact baseline.
 
 ## Intended users
 
@@ -27,4 +29,4 @@ Researchers and engineers may use the corpus to build isolated agent harnesses, 
 
 ## Claim discipline
 
-Reports using BoundaryBench should state the exact commit, schema version, scenario versions, harness behavior, model configuration, test account or stub setup, and exclusions. Every reported number should identify its run artifact. The committed v0.1 artifact is explicitly typed as reference harness conformance so it cannot be confused with an external model evaluation.
+Reports using BoundaryBench should state the exact commit, schema version, scenario versions, harness behavior, model configuration, test account or stub setup, and exclusions. Every reported number should identify its run artifact. Committed artifacts are explicitly typed as reference harness conformance so they cannot be confused with an external model evaluation.

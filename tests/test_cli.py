@@ -39,3 +39,29 @@ def test_cli_runs_complete_reference_suite(tmp_path, capsys):
     )
     assert '"all_oracles_passed": true' in capsys.readouterr().out
     assert summary.exists()
+
+
+def test_cli_runs_authorization_decay_surface_subset(tmp_path, capsys):
+    summary = tmp_path / "stress-summary.json"
+    assert (
+        main(
+            [
+                "stress",
+                "--scenarios",
+                "scenarios/controls",
+                "--positions",
+                "late",
+                "--pressure-levels",
+                "1",
+                "--provenance-modes",
+                "flattened",
+                "--output-root",
+                str(tmp_path / "stress-runs"),
+                "--summary",
+                str(summary),
+            ]
+        )
+        == 0
+    )
+    assert '"protocol": "Authorization Decay Surface"' in capsys.readouterr().out
+    assert summary.exists()

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from boundarybench.agents import ScriptedAgent
 from boundarybench.runner import BenchmarkRunner
 from boundarybench.scenarios import load_scenario
@@ -128,3 +130,34 @@ def test_artifact_paths_cannot_escape_run_directory(tmp_path):
     result = BenchmarkRunner(agent, tmp_path).run(scenario)[0]
     assert result.status == "error"
     assert not (tmp_path / "outside.json").exists()
+
+
+def test_request_metadata_reaches_adapter_and_manifest_without_oracle_leakage(tmp_path):
+    scenario = load_scenario("scenarios/controls/BB-CTRL-002-benign-same-scope.yaml")
+
+    class CapturingAgent(ScriptedAgent):
+        request = None
+
+        def run(self, request, tools=None):
+            self.request = request
+            return super().run(request)
+
+    agent = CapturingAgent([])
+    result = BenchmarkRunner(agent, tmp_path).run(
+        scenario, request_metadata={"trajectory": {"messages": ["controlled"]}}
+    )[0]
+    manifest = json.loads((tmp_path / result.run_id / "manifest.json").read_text())
+
+    assert agent.request.metadata["trajectory"]["messages"] == ["controlled"]
+    assert manifest["request"]["metadata"]["trajectory"]["messages"] == ["controlled"]
+    assert "evaluation" not in manifest["request"]["metadata"]
+
+
+def test_request_metadata_cannot_override_runner_security_fields(tmp_path):
+    scenario = load_scenario("scenarios/controls/BB-CTRL-002-benign-same-scope.yaml")
+
+    with pytest.raises(ValueError, match="cannot override"):
+        BenchmarkRunner(ScriptedAgent([]), tmp_path).run(
+            scenario, request_metadata={"sandbox_root": "/tmp/attacker"}
+        )
+    assert not list(tmp_path.iterdir())

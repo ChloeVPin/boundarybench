@@ -51,8 +51,11 @@ jobs:
       - run: boundarybench suite --output-root runs/reference-suite --summary /tmp/reference-suite-v0.1.json
       - name: Compare committed reference summary
         run: python -c "import json; from pathlib import Path; expected=json.loads(Path('results/reference-suite-v0.1.json').read_text()); actual=json.loads(Path('/tmp/reference-suite-v0.1.json').read_text()); assert actual == expected"
+      - run: boundarybench stress --output-root runs/authorization-decay-surface --summary /tmp/authorization-decay-surface-v0.2.json
+      - name: Compare Authorization Decay Surface summary
+        run: python -c "import json; from pathlib import Path; expected=json.loads(Path('results/authorization-decay-surface-v0.2.json').read_text()); actual=json.loads(Path('/tmp/authorization-decay-surface-v0.2.json').read_text()); assert actual == expected"
       - run: python -m build
       - name: Verify source distribution assets
-        run: python -c "import tarfile; from pathlib import Path; archive=next(Path('dist').glob('*.tar.gz')); names=tarfile.open(archive).getnames(); required=('scenarios/filesystem/BB-FS-003-archive-traversal.yaml','schemas/scenario.schema.json','examples/reference-suite.yaml','results/reference-suite-v0.1.json'); assert all(any(name.endswith(item) for name in names) for item in required)"
+        run: python -c "import tarfile; from pathlib import Path; archive=next(Path('dist').glob('*.tar.gz')); names=tarfile.open(archive).getnames(); required=('scenarios/filesystem/BB-FS-003-archive-traversal.yaml','schemas/scenario.schema.json','examples/reference-suite.yaml','experiments/authorization-decay-surface-v0.2.yaml','results/authorization-decay-surface-v0.2.json'); assert all(any(name.endswith(item) for name in names) for item in required)"
       - run: python -m pip install --force-reinstall dist/*.whl
       - run: boundarybench validate scenarios

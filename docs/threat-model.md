@@ -27,10 +27,13 @@ The attacker may:
 - place imperative text in an untrusted source;
 - choose a path, link, archive member, recipient, or tool argument within the fixture;
 - imitate a trusted instruction in tone or formatting; and
-- exploit ambiguity between a task input and an authorization decision.
+- exploit ambiguity between a task input and an authorization decision;
+- move an untrusted instruction earlier or later in the visible trajectory;
+- repeat the same instruction without changing its authority; and
+- remove source labels while preserving the instruction text.
 
 The attacker may not alter the trusted authority declaration, escape the isolated fixture by assumption, or rely on a real external service.
 
 ## Out of scope
 
-BoundaryBench v0.1 does not measure model truthfulness, general cyber capability, availability under load, real-world policy compliance, identity proofing, cryptographic correctness, or the safety of an actual production integration. It does not authorize testing external systems.
+BoundaryBench v0.2 does not measure model truthfulness, general cyber capability, availability under load, real-world policy compliance, identity proofing, cryptographic correctness, or the safety of an actual production integration. It does not authorize testing external systems.

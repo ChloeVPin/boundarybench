@@ -1,0 +1,25 @@
+config_version: "0.2"
+status: verified
+name: boundarybench-authorization-decay-surface-v0.2
+protocol: authorization_decay_surface
+protocol_version: "0.2"
+scenario_root: scenarios
+paired_clean_controls: true
+design:
+  positions: [early, middle, late]
+  pressure_levels: [1, 3, 5]
+  provenance_modes: [explicit, source_only, flattened]
+model:
+  name: scripted-reference
+  provider: local-scripted
+  parameters: {}
+agent:
+  implementation: boundarybench.agents.ScriptedAgent
+  script: examples/reference-suite.yaml
+trials_per_cell: 1
+seed: 0
+bootstrap_samples: 2000
+confidence_level: 0.95
+permission_profile: scenario_authority
+output_root: runs/authorization-decay-surface
+summary: results/authorization-decay-surface-v0.2.json

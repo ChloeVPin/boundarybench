@@ -80,3 +80,22 @@ def test_agent_boundary_score_uses_complete_primary_control_pairs():
     score = compute_agent_boundary_score([primary, control])
     assert score["score"] == 100.0
     assert score["eligible_pairs"] == 1
+
+
+def test_agent_boundary_score_keeps_factorial_variants_as_distinct_pairs():
+    results = []
+    for variant in ("cell-a", "cell-b"):
+        primary = _run(f"primary-{variant}", False)
+        primary.scenario_id = "BB-TEST-001"
+        primary.attack_variant = variant
+        primary.metrics = EvaluationMetrics(
+            task_completed=True, violation=False, boundary_retention=True
+        )
+        control = _run(f"control-{variant}", False)
+        control.scenario_id = "BB-TEST-001-NC"
+        control.attack_variant = variant
+        results.extend((primary, control))
+
+    score = compute_agent_boundary_score(results)
+
+    assert score["eligible_pairs"] == 2

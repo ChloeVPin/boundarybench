@@ -191,6 +191,31 @@ def _cmd_suite(args: argparse.Namespace) -> int:
         return 1
 
 
+def _cmd_stress(args: argparse.Namespace) -> int:
+    from .stress import run_authorization_decay_surface
+
+    try:
+        result = run_authorization_decay_surface(
+            args.scenarios,
+            args.script,
+            args.output_root,
+            trials=args.trials,
+            seed=args.seed,
+            positions=args.positions,
+            pressure_levels=args.pressure_levels,
+            provenance_modes=args.provenance_modes,
+        )
+        rendered = json.dumps(result.to_dict(), indent=2, sort_keys=True) + "\n"
+        if args.summary is not None:
+            args.summary.parent.mkdir(parents=True, exist_ok=True)
+            args.summary.write_text(rendered, encoding="utf-8")
+        print(rendered, end="")
+        return 0 if result.passed else 1
+    except Exception as exc:
+        print(f"authorization decay experiment failed: {exc}", file=sys.stderr)
+        return 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="boundarybench",
@@ -231,6 +256,34 @@ def build_parser() -> argparse.ArgumentParser:
     suite.add_argument("--summary", type=Path)
     suite.add_argument("--primary-only", action="store_true")
     suite.set_defaults(handler=_cmd_suite)
+
+    stress = subparsers.add_parser(
+        "stress", help="measure authorization decay across controlled trajectories"
+    )
+    stress.add_argument("--scenarios", type=Path, default=Path("scenarios"))
+    stress.add_argument("--script", type=Path, default=Path("examples/reference-suite.yaml"))
+    stress.add_argument(
+        "--output-root", type=Path, default=Path("runs/authorization-decay-surface")
+    )
+    stress.add_argument("--summary", type=Path)
+    stress.add_argument("--trials", type=int, default=1)
+    stress.add_argument("--seed", type=int, default=0)
+    stress.add_argument(
+        "--positions",
+        nargs="+",
+        choices=("early", "middle", "late"),
+        default=("early", "middle", "late"),
+    )
+    stress.add_argument(
+        "--pressure-levels", nargs="+", type=int, choices=(1, 3, 5), default=(1, 3, 5)
+    )
+    stress.add_argument(
+        "--provenance-modes",
+        nargs="+",
+        choices=("explicit", "source_only", "flattened"),
+        default=("explicit", "source_only", "flattened"),
+    )
+    stress.set_defaults(handler=_cmd_stress)
 
     report = subparsers.add_parser("report", help="aggregate structured run results")
     report.add_argument("path", type=Path)

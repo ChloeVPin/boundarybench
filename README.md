@@ -3,24 +3,37 @@
 [![CI](https://github.com/ChloeVPin/boundarybench/actions/workflows/ci.yml/badge.svg)](https://github.com/ChloeVPin/boundarybench/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB)](https://www.python.org/)
 [![MIT License](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
+[![Research protocol](https://img.shields.io/badge/protocol-Authorization_Decay_Surface-6f42c1)](docs/authorization-decay-surface.md)
 
-BoundaryBench is a reproducible benchmark for measuring whether autonomous agents preserve authorization boundaries while completing useful work. Version 0.1 includes a typed scenario format, an isolated filesystem, controlled tools, complete event traces, deterministic oracles, paired negative controls, and a one command reference suite.
+BoundaryBench is a reproducible research instrument for measuring whether autonomous agents preserve authorization while context, pressure, and provenance change around them.
 
-The benchmark studies authorization decay: the possibility that an agent begins treating lower trust content as authority as a task moves through files, messages, tools, and execution steps. BoundaryBench keeps authority, provenance, action, and outcome separate so each decision can be inspected after a run.
+Version 0.2 introduces the Authorization Decay Surface, a controlled factorial protocol that reveals where an agent's boundary discipline weakens. It varies the position of an untrusted instruction, the number of times it appears, and the visibility of its provenance while holding the task and authority ledger constant. Paired clean controls separate real boundary failures from blanket refusal.
 
-## Reference release
+## The research contribution
 
-| Component | Included |
-| --- | ---: |
-| Primary scenarios | 11 |
-| Paired negative controls | 11 |
-| Deterministic reference cases | 22 |
-| Scenario categories | 4 |
-| Supported Python versions | 3.11 through 3.14 |
+Most prompt injection evaluations ask whether an attack worked. BoundaryBench asks a more diagnostic question: which controlled change caused authorization to decay?
 
-The committed [reference conformance result](results/reference-suite-v0.1.json) records 22 passing deterministic cases and an Agent Boundary Score of 100 for the scripted reference adapter. This artifact verifies the harness, scenario fixtures, controlled operations, and oracles. Model evaluations can use the same scenarios and reporting contract without changing the corpus.
+| Factor | Levels |
+| --- | --- |
+| Injection position | early, middle, late |
+| Repetition pressure | 1, 3, 5 |
+| Provenance visibility | explicit, source only, flattened |
 
-## Quick start
+The full design contains 27 matched conditions for every scenario. Across eleven primary scenarios and eleven clean controls, one trial produces 594 isolated cases.
+
+The resulting Authorization Decay Fingerprint reports:
+
+* attack versus clean control gap
+* provenance attenuation effect
+* late position effect
+* repetition pressure effect
+* worst cell safe completion
+* Wilson intervals for rates
+* scenario clustered bootstrap intervals for matched effects
+
+Positive effects indicate lower safe completion under stronger stress. Unknown observations remain null and never become implicit failures or successes.
+
+## Run it
 
 ```bash
 git clone https://github.com/ChloeVPin/boundarybench.git
@@ -28,21 +41,62 @@ cd boundarybench
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
+
 boundarybench validate scenarios
-boundarybench suite
+boundarybench stress \
+  --output-root runs/authorization-decay-surface \
+  --summary results/local-authorization-decay.json
 ```
 
-The suite creates an isolated run directory for every case. Each directory contains a manifest, an event stream, a result record, artifacts, and the final sandbox state.
+The stress command creates a fresh sandbox for every case and preserves its manifest, model visible trajectory, event stream, artifacts, oracle evidence, and final state.
 
-Run or inspect one scenario:
+Run the compact v0.1 reference suite or inspect one scenario:
 
 ```bash
+boundarybench suite
 boundarybench inspect scenarios/filesystem/BB-FS-003-archive-traversal.yaml
 boundarybench run scenarios/controls/BB-CTRL-002-benign-same-scope.yaml \
   --script examples/smoke-script.yaml \
   --output-root runs
 boundarybench report runs
 ```
+
+## Verified release
+
+| Component | Included |
+| --- | ---: |
+| Primary scenarios | 11 |
+| Paired clean controls | 11 |
+| Factorial conditions per scenario | 27 |
+| Authorization Decay Surface cases | 594 |
+| Deterministic oracle passes | 594 |
+| Focused automated tests | 69 |
+| Supported Python versions | 3.11 through 3.14 |
+
+The committed [v0.2 conformance artifact](results/authorization-decay-surface-v0.2.json) establishes that every generated condition executes through the harness and reaches its declared oracle under the deterministic reference adapter. The [v0.1 reference result](results/reference-suite-v0.1.json) remains available as the compact baseline.
+
+Reference conformance and model behavior are separate result types. A model adapter receives the same controlled trajectory through `request.metadata["trajectory"]` and produces its own run evidence.
+
+## Experimental pipeline
+
+```text
+scenario and clean control
+          |
+          v
+27 controlled trajectories per input
+          |
+          v
+fresh sandbox -> controlled tools -> complete event trace
+          |                              |
+          v                              v
+deterministic oracle          attempted and completed effects
+          |                              |
+          +---------------+--------------+
+                          v
+              Authorization Decay Fingerprint
+```
+
+The trajectory compiler never exposes evaluator fields, expected behavior, authorized effect lists, forbidden effect lists, or oracle answers to the agent. Each trajectory carries a SHA256 digest and an exact authority ledger for independent replay and audit.
 
 ## Scenario corpus
 
@@ -60,45 +114,31 @@ boundarybench report runs
 | BB-TOOL-001 | Tool output attempting to widen recipients and attachments |
 | BB-TOOL-002 | Tool output attempting to change visibility and membership |
 
-Every scenario declares trusted and untrusted sources, an authority manifest, resettable synthetic fixtures, allowed interfaces, exact expected effects, forbidden effects, deterministic oracles, and a clean negative control.
-
-## How it works
-
-```text
-scenario YAML
-    |
-    v
-typed validation -> fresh sandbox -> controlled tools -> event trace
-                                                       |
-                                                       v
-                                  deterministic oracle and ABS report
-```
-
-The runner does not expose host paths or unrestricted network access. Files are mapped into isolated workspace, protected, and external areas. Reads, writes, moves, archive extraction, commands, and synthetic tool calls pass through explicit policy checks and structured instrumentation.
-
-The bundled `ScriptedAgent` provides a deterministic conformance path. A model adapter can implement the same provider neutral request and response interface while retaining the controlled tool boundary and result format.
+Every scenario declares authority, source provenance, resettable synthetic fixtures, allowed interfaces, exact expected effects, forbidden effects, deterministic oracles, and an executable clean control.
 
 ## Documentation
 
 | Topic | Document |
 | --- | --- |
+| Authorization Decay Surface | [Protocol and estimands](docs/authorization-decay-surface.md) |
+| Authorization semantics | [Authorization model](docs/authorization-model.md) |
 | Research framing | [Research overview](docs/research-overview.md) |
+| Study design | [Methodology](docs/methodology.md) |
+| Metrics and uncertainty | [Evaluation](docs/evaluation.md) |
 | Security assumptions | [Threat model](docs/threat-model.md) |
 | Scenario authoring | [Scenario specification](docs/scenario-specification.md) |
-| Study design | [Methodology](docs/methodology.md) |
-| Metrics and oracles | [Evaluation](docs/evaluation.md) |
-| Composite score | [Agent Boundary Score](docs/agent-boundary-score.md) |
+| Composite baseline | [Agent Boundary Score](docs/agent-boundary-score.md) |
 | Supported claims | [Scope](docs/scope.md) |
+| Measurement limits | [Limitations](docs/limitations.md) |
+| Research progression | [Roadmap](docs/roadmap.md) |
 | Research sources | [References](docs/references.md) |
 | Version history | [Release notes](docs/release-notes.md) |
 | Responsible use | [Ethics](docs/ethics.md) |
 
-## Contributing and security
+## Project standards
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a scenario or implementation change. General usage questions belong in [GitHub Discussions](https://github.com/ChloeVPin/boundarybench/discussions). Bugs and scenario proposals belong in [GitHub Issues](https://github.com/ChloeVPin/boundarybench/issues). Report unsafe fixtures, exposed data, or execution boundary failures privately through the repository Security tab as described in [SECURITY.md](SECURITY.md).
+BoundaryBench runs entirely on synthetic fixtures and local stubs. It never authorizes testing external systems or contacting real recipients.
 
-BoundaryBench uses only synthetic fixtures and local stubs. The project does not authorize testing external systems or contacting real recipients.
-
-## Citation and license
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a scenario or implementation change. Use [GitHub Discussions](https://github.com/ChloeVPin/boundarybench/discussions) for research questions and [GitHub Issues](https://github.com/ChloeVPin/boundarybench/issues) for defects and scenario proposals. Report execution boundary failures privately through the Security tab as described in [SECURITY.md](SECURITY.md).
 
 Citation metadata is available in [CITATION.cff](CITATION.cff). BoundaryBench is released under the [MIT License](LICENSE).

@@ -274,6 +274,7 @@ class BenchmarkRunner:
         mitigation: str | None = None,
         attack_variant: str | None = None,
         position: str | int | None = None,
+        request_metadata: Mapping[str, Any] | None = None,
     ) -> list[Any]:
         if trials < 1:
             raise ValueError("trials must be at least 1")
@@ -286,6 +287,7 @@ class BenchmarkRunner:
                 mitigation=mitigation,
                 attack_variant=attack_variant,
                 position=position,
+                request_metadata=request_metadata,
             )
             for trial in range(trials)
         ]
@@ -305,6 +307,7 @@ class BenchmarkRunner:
         mitigation: str | None = None,
         attack_variant: str | None = None,
         position: str | int | None = None,
+        request_metadata: Mapping[str, Any] | None = None,
     ) -> Any:
         # Local imports keep the runner usable as a small library and avoid
         # making scenario validation depend on execution concerns.
@@ -316,7 +319,22 @@ class BenchmarkRunner:
         from .tools import ControlledTools
 
         scenario_id = self._scenario_id(scenario)
-        run_id = self._run_id(scenario_id, trial, seed, model, mitigation, attack_variant, position)
+        reserved_metadata = {"tool_names", "sandbox_root"}
+        supplied_metadata = dict(request_metadata or {})
+        collisions = reserved_metadata.intersection(supplied_metadata)
+        if collisions:
+            names = ", ".join(sorted(collisions))
+            raise ValueError(f"request metadata cannot override runner fields: {names}")
+        run_id = self._run_id(
+            scenario_id,
+            trial,
+            seed,
+            model,
+            mitigation,
+            attack_variant,
+            position,
+            request_metadata,
+        )
         run_dir = self._new_run_dir(run_id)
         artifacts_dir = run_dir / "artifacts"
         artifacts_dir.mkdir(parents=True, exist_ok=True)
@@ -349,6 +367,7 @@ class BenchmarkRunner:
             position=position,
             trial=trial,
             metadata={
+                **supplied_metadata,
                 "tool_names": [
                     "read",
                     "write",
@@ -368,7 +387,7 @@ class BenchmarkRunner:
             },
         )
         manifest = {
-            "boundarybench_version": "0.1.0",
+            "boundarybench_version": self._boundarybench_version(),
             "run_id": run_id,
             "scenario_id": scenario_id,
             "scenario_version": _value(scenario, "version"),
@@ -980,15 +999,31 @@ class BenchmarkRunner:
         mitigation: str | None,
         attack_variant: str | None,
         position: str | int | None,
+        request_metadata: Mapping[str, Any] | None = None,
     ) -> str:
         safe_id = re.sub(r"[^A-Za-z0-9_.-]+", "-", scenario_id).strip("-") or "scenario"
         configuration = json.dumps(
-            [scenario_id, trial, seed, model, mitigation, attack_variant, position],
+            [
+                scenario_id,
+                trial,
+                seed,
+                model,
+                mitigation,
+                attack_variant,
+                position,
+                request_metadata,
+            ],
             sort_keys=True,
             default=str,
         )
         digest = hashlib.sha256(configuration.encode("utf-8")).hexdigest()[:10]
         return f"{safe_id}-trial-{trial:04d}-{digest}"
+
+    @staticmethod
+    def _boundarybench_version() -> str:
+        from ._version import __version__
+
+        return __version__
 
     @staticmethod
     def _error_record(stage: str, exc: Exception) -> dict[str, str]:
@@ -1128,6 +1163,7 @@ def run_scenario(
     position: str | int | None = None,
     script: Any = None,
     agent: Any = None,
+    request_metadata: Mapping[str, Any] | None = None,
 ) -> list[Any]:
     """Run one scenario through the provider neutral benchmark interface.
 
@@ -1164,6 +1200,7 @@ def run_scenario(
         mitigation=mitigation,
         attack_variant=attack_variant,
         position=selected_position,
+        request_metadata=request_metadata,
     )
 
 

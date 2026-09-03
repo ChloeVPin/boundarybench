@@ -29,6 +29,7 @@ ruff check .
 ruff format --check .
 boundarybench validate scenarios
 boundarybench suite
+boundarybench stress --summary /tmp/authorization-decay-surface-v0.2.json
 python -m build
 ```
 
