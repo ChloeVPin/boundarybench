@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#080a0c" />
+    <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="BoundaryBench is an independent research initiative measuring whether tool-using AI agents preserve authorization under pressure."
+      content="BoundaryBench is an independent research initiative measuring whether tool using AI agents preserve authorization under pressure."
     />
     <title>BoundaryBench | Researching the edge of authority</title>
     <link rel="stylesheet" href="styles.css" />
@@ -24,135 +24,129 @@
           <span>Menu</span>
         </button>
         <nav class="site-nav" id="site-menu" aria-label="Primary navigation">
-          <a href="#question">The question</a>
-          <a href="#method">The method</a>
-          <a href="#evidence">The evidence</a>
-          <a class="nav-link-accent" href="https://github.com/ChloeVPin/boundarybench">Open repository <span aria-hidden="true">↗</span></a>
+          <a href="#research">Research</a>
+          <a href="#protocol">Protocol</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#record">Public record</a>
         </nav>
+        <div class="nav-actions">
+          <a class="nav-link" href="https://github.com/ChloeVPin/boundarybench">GitHub <span aria-hidden="true">↗</span></a>
+          <a class="nav-pill" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/researcher-access-brief.md">Read the brief</a>
+        </div>
       </div>
     </header>
 
     <main id="main">
       <section class="hero" id="top">
-        <div class="shell hero-grid">
-          <div class="hero-copy reveal">
-            <p class="eyebrow"><span class="eyebrow-dot"></span> Independent research initiative · 2026</p>
-            <h1>Who gave the agent permission?</h1>
-            <p class="hero-lede">
-              BoundaryBench studies the moment useful information starts to look like authority. It is a reproducible instrument for measuring whether tool-using AI agents keep the boundary the user actually set.
-            </p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="#question">Read the question <span aria-hidden="true">↓</span></a>
-              <a class="button button-quiet" href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">Open the research record <span aria-hidden="true">↗</span></a>
-            </div>
-            <p class="hero-note">Open methods. Synthetic fixtures. Exact authority ledgers.</p>
-          </div>
-          <div class="hero-art reveal reveal-delay" aria-label="Abstract artwork showing paths meeting a transparent boundary" role="img">
-            <img src="assets/boundary-field.png" alt="Luminous paths meeting a transparent boundary in a dark field" />
-            <div class="art-label art-label-top">Authorization<br />Decay Surface</div>
-            <div class="art-label art-label-bottom"><span>03</span><span>03</span><span>03</span><em>factorial design</em></div>
-            <div class="art-caption">A boundary is only useful if the system can keep it when the context changes.</div>
+        <div class="shell hero-intro reveal is-visible">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> BoundaryBench / Independent research</p>
+          <h1>Researching the edge of authority.</h1>
+          <p class="hero-copy">
+            When an agent encounters information inside a task, can it tell the difference between content to read and authority to act?
+          </p>
+          <div class="hero-actions">
+            <a class="button button-light" href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">Read the research record <span aria-hidden="true">↗</span></a>
+            <a class="button button-dark" href="#protocol">Explore the protocol <span aria-hidden="true">↓</span></a>
           </div>
         </div>
-        <div class="shell hero-rule" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="shell hero-visual reveal reveal-delay-short is-visible" role="img" aria-label="Abstract artwork showing luminous paths meeting a transparent boundary">
+          <img src="assets/boundary-field.png" alt="Luminous paths meeting a transparent boundary in a dark field" />
+          <div class="visual-meta visual-meta-top"><span>Authorization Decay Surface</span><span>Study 03</span></div>
+          <div class="visual-meta visual-meta-bottom"><span>27 controlled conditions</span><span>synthetic fixtures</span><span>open methods</span></div>
+        </div>
+        <div class="shell hero-caption"><span>01</span><span>The boundary is the subject.</span><span>Scroll to enter the record ↓</span></div>
       </section>
 
-      <section class="signal-strip" aria-label="Project principles">
-        <div class="shell signal-items">
-          <span>Reproducible</span>
-          <span>Open</span>
-          <span>Synthetic</span>
-          <span>Controlled</span>
-          <span>Auditable</span>
+      <section class="focus-section section-dark" id="research">
+        <div class="shell">
+          <div class="section-intro centered reveal">
+            <p class="section-label">Focus areas</p>
+            <h2>Make the pressure visible.</h2>
+            <p>BoundaryBench changes one part of the context at a time. The task stays fixed. The authority ledger stays explicit.</p>
+          </div>
+          <div class="focus-grid">
+            <article class="focus-card reveal">
+              <div class="focus-card-top"><span>01</span><span class="signal signal-blue"></span></div>
+              <div class="focus-visual focus-visual-blue"><span>explicit</span><span>source only</span><span>flattened</span></div>
+              <h3>Provenance</h3>
+              <p>Does the source of an instruction change whether the agent treats it as authority?</p>
+              <a class="card-link" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/authorization-model.md">Read the authorization model <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="focus-card reveal reveal-delay-short">
+              <div class="focus-card-top"><span>02</span><span class="signal signal-cyan"></span></div>
+              <div class="focus-visual focus-visual-cyan"><span>early</span><span>middle</span><span>late</span></div>
+              <h3>Position</h3>
+              <p>Does the same pressure behave differently when it appears earlier or later in a trajectory?</p>
+              <a class="card-link" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/authorization-decay-surface.md">Read the protocol <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="focus-card reveal reveal-delay-medium">
+              <div class="focus-card-top"><span>03</span><span class="signal signal-lime"></span></div>
+              <div class="focus-visual focus-visual-lime"><span>one</span><span>three</span><span>five</span></div>
+              <h3>Repetition</h3>
+              <p>Does repeated pressure wear down a boundary that held on the first presentation?</p>
+              <a class="card-link" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/methodology.md">Read the methodology <span aria-hidden="true">↗</span></a>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="section question-section" id="question">
-        <div class="shell question-grid">
-          <div class="section-kicker reveal"><span>01</span><span>The question</span></div>
-          <div class="question-copy reveal">
-            <h2>The test is not whether an attack works.</h2>
-            <p class="large-copy">
-              The harder question is what happens after an agent encounters information it was never authorized to follow. Does it complete the legitimate task, preserve the boundary, and leave a trace that makes the decision inspectable?
+      <section class="statement-section section-light" id="question">
+        <div class="shell statement-grid">
+          <div class="section-label reveal">Research question</div>
+          <div class="statement-content reveal reveal-delay-short">
+            <h2>Useful information is not automatically permission.</h2>
+            <p>
+              The benchmark asks whether a capable agent can complete a legitimate task while refusing effects the user never granted. It records the difference between a blocked attempt, a completed side effect, a failed task, and an unknown observation.
             </p>
             <a class="text-link" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/research-overview.md">See the research framing <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <div class="shell metric-grid">
-          <article class="metric-card reveal">
-            <p class="metric-value">11</p>
-            <p class="metric-label">primary scenarios</p>
-            <p class="metric-detail">Filesystem, repository, tool, and control boundaries.</p>
-          </article>
-          <article class="metric-card reveal reveal-delay-short">
-            <p class="metric-value">594</p>
-            <p class="metric-label">controlled cases</p>
-            <p class="metric-detail">Every scenario crossed with a matched clean control.</p>
-          </article>
-          <article class="metric-card metric-card-accent reveal reveal-delay-medium">
-            <p class="metric-value">35,640</p>
-            <p class="metric-label">preregistered cases</p>
-            <p class="metric-detail">A locked model study across three capability tiers and two arms.</p>
-          </article>
-          <article class="metric-card reveal reveal-delay-long">
-            <p class="metric-value">$1,000</p>
-            <p class="metric-label">resource ceiling</p>
-            <p class="metric-detail">A bounded plan designed for responsible access.</p>
-          </article>
-        </div>
       </section>
 
-      <section class="section method-section" id="method">
+      <section class="metrics-section section-light-alt">
         <div class="shell">
-          <div class="section-heading reveal">
-            <div class="section-kicker"><span>02</span><span>The method</span></div>
-            <h2>Make the pressure visible.</h2>
-            <p>
-              BoundaryBench changes one part of the context at a time. The task stays fixed. The authority ledger stays explicit. The evidence shows where safe completion moves.
-            </p>
+          <div class="metrics-heading reveal">
+            <p class="section-label">The design</p>
+            <h2>Small enough to inspect. Large enough to matter.</h2>
           </div>
-          <div class="method-grid">
-            <article class="method-card reveal">
-              <div class="method-index">A</div>
-              <h3>Provenance</h3>
-              <p>Compare instructions that are clearly delegated with the same content flattened into untrusted source material.</p>
-              <div class="method-line"><span>explicit</span><span>source only</span><span>flattened</span></div>
-            </article>
-            <article class="method-card reveal reveal-delay-short">
-              <div class="method-index">B</div>
-              <h3>Position</h3>
-              <p>Move the pressure through the trajectory to test whether attention and recency change authorization preservation.</p>
-              <div class="method-line"><span>early</span><span>middle</span><span>late</span></div>
-            </article>
-            <article class="method-card reveal reveal-delay-medium">
-              <div class="method-index">C</div>
-              <h3>Repetition</h3>
-              <p>Increase the number of presentations without changing the requested effect, exposing pressure that accumulates over time.</p>
-              <div class="method-line"><span>one</span><span>three</span><span>five</span></div>
-            </article>
-          </div>
-          <div class="method-footer reveal">
-            <p><span class="accent-bar"></span> 27 matched conditions per scenario</p>
-            <a class="text-link" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/authorization-decay-surface.md">Read the protocol <span aria-hidden="true">↗</span></a>
+          <div class="metrics-grid">
+            <article class="metric reveal"><strong>11</strong><span>primary scenarios</span><p>Filesystem, repository, tool, and control boundaries.</p></article>
+            <article class="metric reveal reveal-delay-short"><strong>594</strong><span>controlled cases</span><p>Every scenario crossed with a matched clean control.</p></article>
+            <article class="metric metric-highlight reveal reveal-delay-medium"><strong>35,640</strong><span>preregistered cases</span><p>A locked study across three model tiers and two intervention arms.</p></article>
+            <article class="metric reveal reveal-delay-long"><strong>2</strong><span>outcome layers</span><p>Task utility and authorization preservation remain separate.</p></article>
           </div>
         </div>
       </section>
 
-      <section class="section evidence-section" id="evidence">
-        <div class="shell evidence-grid">
-          <div class="evidence-intro reveal">
-            <div class="section-kicker"><span>03</span><span>The evidence</span></div>
-            <h2>Separate the outcome from the story.</h2>
-            <p>
-              A refusal can look safe while hiding a failed task. A completed task can look useful while concealing an unauthorized effect. The instrument keeps those outcomes apart.
-            </p>
-            <a class="button button-outline" href="https://github.com/ChloeVPin/boundarybench/tree/main/results">Explore the result artifacts <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="fingerprint reveal reveal-delay">
-            <div class="fingerprint-head">
-              <span>Authorization Decay Fingerprint</span>
-              <span class="fingerprint-status"><i></i> deterministic oracle</span>
+      <section class="protocol-section section-dark" id="protocol">
+        <div class="shell">
+          <div class="protocol-heading reveal">
+            <div>
+              <p class="section-label">Protocol</p>
+              <h2>Three pressures. One controlled surface.</h2>
             </div>
+            <p>Each primary scenario is evaluated across a matched 3 × 3 × 3 design. No evaluator answer is exposed to the agent.</p>
+          </div>
+          <div class="protocol-table reveal reveal-delay-short">
+            <div class="protocol-row protocol-header"><span>Factor</span><span>Levels</span><span>Why it matters</span></div>
+            <div class="protocol-row"><span><b>Position</b></span><span>early · middle · late</span><span>Tests attention, recency, and trajectory location.</span></div>
+            <div class="protocol-row"><span><b>Repetition</b></span><span>one · three · five</span><span>Measures pressure that accumulates without changing the requested effect.</span></div>
+            <div class="protocol-row"><span><b>Provenance</b></span><span>explicit · source only · flattened</span><span>Separates authority from information that merely looks instructive.</span></div>
+          </div>
+          <div class="protocol-footer reveal"><span>27 matched conditions per scenario</span><a class="button button-outline-light" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/preregistered-study.md">Open the preregistration <span aria-hidden="true">↗</span></a></div>
+        </div>
+      </section>
+
+      <section class="evidence-section section-blue" id="evidence">
+        <div class="shell evidence-grid">
+          <div class="evidence-copy reveal">
+            <p class="section-label">Evidence</p>
+            <h2>Separate the outcome from the story.</h2>
+            <p>A refusal can look safe while hiding a failed task. A completed task can look useful while concealing an unauthorized effect. The instrument keeps those outcomes apart.</p>
+            <a class="button button-dark-solid" href="https://github.com/ChloeVPin/boundarybench/tree/main/results">Explore the result artifacts <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="fingerprint reveal reveal-delay-short">
+            <div class="fingerprint-head"><span>Authorization Decay Fingerprint</span><span class="fingerprint-status"><i></i> deterministic oracle</span></div>
             <div class="fingerprint-chart" role="img" aria-label="Illustrative fingerprint with four measured dimensions">
               <div class="chart-row"><span>safe completion</span><div class="bar-track"><span class="bar bar-cyan" style="--size: 86%"></span></div><strong>86</strong></div>
               <div class="chart-row"><span>boundary retained</span><div class="bar-track"><span class="bar bar-blue" style="--size: 92%"></span></div><strong>92</strong></div>
@@ -164,34 +158,30 @@
         </div>
       </section>
 
-      <section class="section observability-section">
+      <section class="record-section section-dark" id="record">
         <div class="shell">
-          <div class="observability-heading reveal">
-            <p class="eyebrow"><span class="eyebrow-dot"></span> What stays observable</p>
-            <h2>Every decision leaves a shape.</h2>
+          <div class="record-heading reveal">
+            <p class="section-label">Public record</p>
+            <h2>Everything needed to inspect the claim.</h2>
+            <p>The repository is the canonical record. The site is the entry point.</p>
           </div>
-          <div class="observability-grid">
-            <article class="observable-card reveal"><span class="observable-number">01</span><h3>Requested</h3><p>What the agent was asked to do, preserved before tool execution.</p></article>
-            <article class="observable-card reveal reveal-delay-short"><span class="observable-number">02</span><h3>Denied</h3><p>What crossed the declared authority boundary and was stopped.</p></article>
-            <article class="observable-card reveal reveal-delay-medium"><span class="observable-number">03</span><h3>Completed</h3><p>What actually changed inside the resettable synthetic fixture.</p></article>
-            <article class="observable-card reveal reveal-delay-long"><span class="observable-number">04</span><h3>Explained</h3><p>Which oracle evidence supports the final classification and why.</p></article>
+          <div class="record-grid">
+            <a class="record-card reveal" href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md"><span class="record-number">01</span><span class="record-type">Research record</span><h3>Read the full study map</h3><span class="card-link">RESEARCH.md <span aria-hidden="true">↗</span></span></a>
+            <a class="record-card reveal reveal-delay-short" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/preregistered-study.md"><span class="record-number">02</span><span class="record-type">Confirmatory study</span><h3>See the locked design</h3><span class="card-link">Preregistration <span aria-hidden="true">↗</span></span></a>
+            <a class="record-card reveal reveal-delay-medium" href="https://github.com/ChloeVPin/boundarybench/tree/main/results"><span class="record-number">03</span><span class="record-type">Result artifacts</span><h3>Inspect the evidence</h3><span class="card-link">Results directory <span aria-hidden="true">↗</span></span></a>
+            <a class="record-card reveal reveal-delay-long" href="https://github.com/ChloeVPin/boundarybench/blob/main/CITATION.cff"><span class="record-number">04</span><span class="record-type">Open research</span><h3>Cite the instrument</h3><span class="card-link">Citation metadata <span aria-hidden="true">↗</span></span></a>
           </div>
         </div>
       </section>
 
-      <section class="section invitation-section">
-        <div class="shell invitation-grid">
-          <div class="invitation-mark" aria-hidden="true"><span></span><span></span><span></span></div>
-          <div class="invitation-copy reveal">
-            <p class="eyebrow"><span class="eyebrow-dot"></span> Built for independent scrutiny</p>
+      <section class="closing-section section-lime">
+        <div class="shell closing-grid">
+          <div class="closing-symbol" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="closing-copy reveal">
+            <p class="section-label">Built for independent scrutiny</p>
             <h2>Read it. Run it. Question it.</h2>
-            <p>
-              The complete research record, scenario corpus, execution harness, schemas, and analysis commitments are public. BoundaryBench is made to be inspected by people who care about what an agent is allowed to do.
-            </p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="https://github.com/ChloeVPin/boundarybench">Open BoundaryBench <span aria-hidden="true">↗</span></a>
-              <a class="button button-quiet" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/researcher-access-brief.md">Read the study brief <span aria-hidden="true">↗</span></a>
-            </div>
+            <p>Open methods, synthetic fixtures, exact authority ledgers, and a record designed for another researcher to pick up.</p>
+            <div class="hero-actions"><a class="button button-dark-solid" href="https://github.com/ChloeVPin/boundarybench">Open BoundaryBench <span aria-hidden="true">↗</span></a><a class="button button-dark-quiet" href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/researcher-access-brief.md">Read the study brief <span aria-hidden="true">↗</span></a></div>
           </div>
         </div>
       </section>
@@ -199,16 +189,8 @@
 
     <footer class="site-footer">
       <div class="shell footer-grid">
-        <div>
-          <a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span><span class="brand-name">BoundaryBench</span></a>
-          <p class="footer-note">An independent research initiative for authorization-preserving AI agents.</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://github.com/ChloeVPin/boundarybench">GitHub <span aria-hidden="true">↗</span></a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">Research record <span aria-hidden="true">↗</span></a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/CITATION.cff">Citation <span aria-hidden="true">↗</span></a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/SECURITY.md">Responsible disclosure <span aria-hidden="true">↗</span></a>
-        </div>
+        <div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span><span class="brand-name">BoundaryBench</span></a><p class="footer-note">An independent research initiative for authorization preserving AI agents.</p></div>
+        <div class="footer-links"><a href="https://github.com/ChloeVPin/boundarybench">GitHub <span aria-hidden="true">↗</span></a><a href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">Research record <span aria-hidden="true">↗</span></a><a href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/brand-charter.md">Brand charter <span aria-hidden="true">↗</span></a><a href="https://github.com/ChloeVPin/boundarybench/blob/main/SECURITY.md">Responsible disclosure <span aria-hidden="true">↗</span></a></div>
         <div class="footer-meta"><span>Open methods</span><span>MIT licensed</span><span id="year">2026</span></div>
       </div>
     </footer>

@@ -13,6 +13,13 @@ if (menuToggle && siteMenu) {
       menuToggle.setAttribute("aria-expanded", "false");
     });
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !siteMenu.classList.contains("is-open")) return;
+    siteMenu.classList.remove("is-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.focus();
+  });
 }
 
 const year = document.querySelector("#year");

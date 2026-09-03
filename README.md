@@ -8,7 +8,7 @@
 
 BoundaryBench is a reproducible research instrument for measuring whether autonomous agents preserve authorization while context, pressure, and provenance change around them.
 
-The project has a public research studio at [`site/`](site/) designed to make the research question, method, and evidence legible before a reader enters the repository. See the [brand charter](docs/brand-charter.md) for the public identity and editorial commitments.
+The project has a public research studio at [`site/`](site/) designed to make the research question, method, and evidence legible before a reader enters the repository. See the [brand charter](docs/brand-charter.md) for the public identity and editorial commitments, and the [site design audit](docs/site-design-audit.md) for the visual research behind the current layout.
 
 Version 0.3 turns that instrument into a complete model-study package. It adds a Responses API adapter restricted to local synthetic tools, a preregistration compiler that locks every research decision before collection, a matched mitigation analysis, and a $1,000 resource plan for 35,640 cases across three model tiers and two intervention arms.
 
