@@ -195,15 +195,31 @@ def _cmd_stress(args: argparse.Namespace) -> int:
     from .stress import run_authorization_decay_surface
 
     try:
+        agent = None
+        script = args.script
+        if args.provider == "openai":
+            from .openai_adapter import OpenAIResponsesAgent
+
+            agent = OpenAIResponsesAgent(
+                args.model,
+                reasoning_effort=args.reasoning_effort,
+                max_output_tokens=args.max_output_tokens,
+                max_tool_rounds=args.max_tool_rounds,
+                mitigation=args.mitigation,
+            )
+            script = None
         result = run_authorization_decay_surface(
             args.scenarios,
-            args.script,
+            script,
             args.output_root,
             trials=args.trials,
             seed=args.seed,
             positions=args.positions,
             pressure_levels=args.pressure_levels,
             provenance_modes=args.provenance_modes,
+            agent=agent,
+            model=args.model,
+            mitigation=args.mitigation if args.mitigation != "none" else None,
         )
         rendered = json.dumps(result.to_dict(), indent=2, sort_keys=True) + "\n"
         if args.summary is not None:
@@ -214,6 +230,43 @@ def _cmd_stress(args: argparse.Namespace) -> int:
     except Exception as exc:
         print(f"authorization decay experiment failed: {exc}", file=sys.stderr)
         return 1
+
+
+def _cmd_plan(args: argparse.Namespace) -> int:
+    from .study import compile_study_plan, write_study_plan
+
+    try:
+        plan = (
+            write_study_plan(args.study, args.output)
+            if args.output is not None
+            else compile_study_plan(args.study)
+        )
+    except Exception as exc:
+        print(f"study planning failed: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(plan, indent=2, sort_keys=True))
+    return 0 if plan["resource_plan"]["within_funding_cap"] else 1
+
+
+def _cmd_compare_mitigation(args: argparse.Namespace) -> int:
+    from .stress import compare_mitigation_runs
+
+    try:
+        report = compare_mitigation_runs(
+            args.baseline,
+            args.intervention,
+            bootstrap_samples=args.bootstrap_samples,
+            seed=args.seed,
+        )
+        rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"
+        if args.summary is not None:
+            args.summary.parent.mkdir(parents=True, exist_ok=True)
+            args.summary.write_text(rendered, encoding="utf-8")
+        print(rendered, end="")
+    except Exception as exc:
+        print(f"mitigation comparison failed: {exc}", file=sys.stderr)
+        return 1
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -262,6 +315,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     stress.add_argument("--scenarios", type=Path, default=Path("scenarios"))
     stress.add_argument("--script", type=Path, default=Path("examples/reference-suite.yaml"))
+    stress.add_argument("--provider", choices=("scripted", "openai"), default="scripted")
+    stress.add_argument("--model", default="scripted-reference")
+    stress.add_argument(
+        "--reasoning-effort",
+        choices=("none", "low", "medium", "high", "xhigh", "max"),
+        default="medium",
+    )
+    stress.add_argument("--max-output-tokens", type=int, default=1500)
+    stress.add_argument("--max-tool-rounds", type=int, default=8)
+    stress.add_argument("--mitigation", choices=("none", "authority-checkpoint"), default="none")
     stress.add_argument(
         "--output-root", type=Path, default=Path("runs/authorization-decay-surface")
     )
@@ -284,6 +347,22 @@ def build_parser() -> argparse.ArgumentParser:
         default=("explicit", "source_only", "flattened"),
     )
     stress.set_defaults(handler=_cmd_stress)
+
+    plan = subparsers.add_parser("plan", help="compile and lock a preregistered model study")
+    plan.add_argument("study", type=Path)
+    plan.add_argument("--output", type=Path)
+    plan.set_defaults(handler=_cmd_plan)
+
+    compare = subparsers.add_parser(
+        "compare-mitigation",
+        help="compare matched baseline and mitigation run collections",
+    )
+    compare.add_argument("baseline", type=Path)
+    compare.add_argument("intervention", type=Path)
+    compare.add_argument("--bootstrap-samples", type=int, default=2000)
+    compare.add_argument("--seed", type=int, default=0)
+    compare.add_argument("--summary", type=Path)
+    compare.set_defaults(handler=_cmd_compare_mitigation)
 
     report = subparsers.add_parser("report", help="aggregate structured run results")
     report.add_argument("path", type=Path)

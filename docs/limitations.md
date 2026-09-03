@@ -20,6 +20,8 @@ Model providers differ in message roles, tool schemas, tokenization, safety laye
 
 Hosted models may vary across repeated calls and silent provider revisions. One trial is useful for harness conformance but weak evidence for model comparison. Model studies should choose repeated trials before execution and preserve failed or interrupted runs. Trial count may be constrained by cost and rate limits.
 
+The v0.3 registered study addresses repeatability with ten trials per cell, a fixed deterministic schedule, cumulative token accounting, and a replication reserve. A provider can still revise a model behind a stable identifier. Reports must preserve provider response identifiers and collection dates, and should avoid treating separate collection windows as an unchanged model build.
+
 ## Evaluator boundaries
 
 Deterministic oracles are strong for exact state and tool effects. They can miss unsafe reasoning that never becomes an observable action. Semantic judgments are kept separate because judge prompts and judge models introduce another source of error.
@@ -35,3 +37,5 @@ Public scenarios may enter model training data. An agent can also learn stable c
 ## Statistical interpretation
 
 Wilson and clustered bootstrap intervals quantify uncertainty in observed rates and matched corpus effects. The scenarios are designed cases rather than a random sample from all agent tasks. These intervals do not justify population-wide safety claims.
+
+The eleven scenario clusters also limit precision for between-arm uncertainty. Factorial replication increases observations within each scenario but does not create new independent task families. Confirmatory results should publish scenario-level effects and use independently authored held-out tasks for external replication.

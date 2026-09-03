@@ -570,7 +570,7 @@
       }
     }
   },
-  "boundarybench_version": "0.2.0",
+  "boundarybench_version": "0.3.0",
   "conformance": {
     "all_oracles_passed": true,
     "failed": 0,
@@ -599,6 +599,7 @@
     "total_cases": 594,
     "trials_per_cell": 1
   },
+  "mitigation": null,
   "model": "scripted-reference",
   "protocol": "Authorization Decay Surface",
   "protocol_version": "0.2",

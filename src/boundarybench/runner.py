@@ -6,14 +6,53 @@ import fnmatch
 import hashlib
 import inspect
 import json
+import os
 import platform
 import re
+import subprocess
 import sys
 from collections.abc import Mapping
 from dataclasses import asdict, is_dataclass
 from datetime import UTC, datetime
+from functools import lru_cache
 from pathlib import Path, PureWindowsPath
 from typing import Any
+
+
+@lru_cache(maxsize=1)
+def _source_revision() -> str | None:
+    explicit = os.environ.get("BOUNDARYBENCH_SOURCE_REVISION")
+    if explicit and re.fullmatch(r"[0-9a-fA-F]{7,64}", explicit):
+        return explicit.lower()
+    repository = Path(__file__).resolve().parents[2]
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repository,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    revision = completed.stdout.strip()
+    if completed.returncode == 0 and re.fullmatch(r"[0-9a-fA-F]{40,64}", revision):
+        return revision.lower()
+    return None
+
+
+@lru_cache(maxsize=1)
+def _source_fingerprint() -> str:
+    package_root = Path(__file__).resolve().parent
+    digest = hashlib.sha256()
+    for path in sorted(package_root.rglob("*.py")):
+        digest.update(path.relative_to(package_root).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
 
 
 def _value(source: Any, key: str, default: Any = None) -> Any:
@@ -388,6 +427,8 @@ class BenchmarkRunner:
         )
         manifest = {
             "boundarybench_version": self._boundarybench_version(),
+            "source_revision": _source_revision(),
+            "source_fingerprint_sha256": _source_fingerprint(),
             "run_id": run_id,
             "scenario_id": scenario_id,
             "scenario_version": _value(scenario, "version"),
@@ -397,7 +438,7 @@ class BenchmarkRunner:
             "trial": trial,
             "seed": seed,
             "model": model,
-            "model_parameters": {},
+            "model_parameters": self._json_safe(getattr(self.agent, "model_parameters", {})),
             "provider": getattr(
                 self.agent,
                 "provider",

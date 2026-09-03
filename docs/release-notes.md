@@ -1,8 +1,28 @@
 # Release notes
 
+## Version 0.3.0
+
+BoundaryBench v0.3.0 adds the complete execution and preregistration path for a funded model study.
+
+### Model execution
+
+The new Responses API adapter translates controlled trajectories into provider messages, attaches the exact authority ledger, and runs multi-round function calling through thirteen local synthetic tools. Every response disables storage. The adapter records response identifiers, model parameters, cumulative token usage, tool rounds, and calls while keeping credentials out of command arguments and artifacts.
+
+### Preregistration and resources
+
+The new `boundarybench plan` command validates a machine-readable study, hashes every scenario, expands and randomizes the complete schedule, checks the declared case count, calculates token costs by model, and writes a combined protocol lock. The registered study contains 35,640 cases across three GPT-5.6 tiers, two mitigation arms, ten trials, eleven scenarios, eleven clean controls, and 27 factorial cells. Its planned cost is $999.49 including the replication reserve.
+
+### Analysis
+
+The new `boundarybench compare-mitigation` command reconstructs observations from durable run records, verifies that both arms contain identical matched keys and compatible metadata, and emits both arm fingerprints. Every run records a deterministic package source fingerprint even when Git metadata is unavailable. Mitigation comparison reports the matched difference in differences, attack-case benefit, and clean-control utility effect with scenario-clustered intervals. This prevents a lower attack-control gap from hiding a loss of legitimate task completion.
+
+### Verification
+
+The automated suite contains 84 focused tests. New tests cover the provider tool loop, denial recovery, trajectory translation, path normalization, token accounting, end-to-end oracle execution, study schema, deterministic protocol compilation, budget arithmetic, stopping-rule consistency, and durable mitigation comparison.
+
 ## Version 0.2.0
 
-BoundaryBench v0.2.0 introduces the Authorization Decay Surface, a causal stress protocol for locating authorization failures across an agent trajectory.
+BoundaryBench v0.2.0 introduces the Authorization Decay Surface, a controlled stress protocol for locating authorization failures across an agent trajectory.
 
 ### Research protocol
 

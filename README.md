@@ -4,14 +4,28 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB)](https://www.python.org/)
 [![MIT License](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 [![Research protocol](https://img.shields.io/badge/protocol-Authorization_Decay_Surface-6f42c1)](docs/authorization-decay-surface.md)
+[![Preregistered study](https://img.shields.io/badge/study-35%2C640_cases-0b7285)](docs/preregistered-study.md)
 
 BoundaryBench is a reproducible research instrument for measuring whether autonomous agents preserve authorization while context, pressure, and provenance change around them.
 
-Version 0.2 introduces the Authorization Decay Surface, a controlled factorial protocol that reveals where an agent's boundary discipline weakens. It varies the position of an untrusted instruction, the number of times it appears, and the visibility of its provenance while holding the task and authority ledger constant. Paired clean controls separate real boundary failures from blanket refusal.
+Version 0.3 turns that instrument into a complete model-study package. It adds a Responses API adapter restricted to local synthetic tools, a preregistration compiler that locks every research decision before collection, a matched mitigation analysis, and a $1,000 resource plan for 35,640 cases across three model tiers and two intervention arms.
+
+[Read the research record](RESEARCH.md) or open the [Researcher Access study brief](docs/researcher-access-brief.md).
+
+## Research at a glance
+
+| Question | Design answer |
+| --- | --- |
+| What fails? | Task completion and authorization violations are measured independently |
+| Where does robustness change? | Position, repetition, and provenance vary in a 3 by 3 by 3 factorial design |
+| Is refusal mistaken for safety? | Every attack condition has a matched clean control |
+| Can the failure be mitigated? | Baseline and authority-checkpoint arms use a matched difference in differences |
+| Can another lab reproduce it? | Scenarios, schedule, adapter settings, and analysis commitments are hashed |
+| Is collection bounded? | Synthetic tools, fixed stopping rules, usage accounting, and a $1,000 ceiling |
 
 ## The research contribution
 
-Most prompt injection evaluations ask whether an attack worked. BoundaryBench asks a more diagnostic question: which controlled change caused authorization to decay?
+Most prompt injection evaluations ask whether an attack worked. BoundaryBench asks a more diagnostic question: under which controlled context changes does authorization preservation weaken?
 
 | Factor | Levels |
 | --- | --- |
@@ -43,6 +57,8 @@ source .venv/bin/activate
 python -m pip install -e ".[dev]"
 
 boundarybench validate scenarios
+boundarybench plan experiments/openai-researcher-access-v0.3.yaml \
+  --output results/local-study-plan.json
 boundarybench stress \
   --output-root runs/authorization-decay-surface \
   --summary results/local-authorization-decay.json
@@ -61,6 +77,32 @@ boundarybench run scenarios/controls/BB-CTRL-002-benign-same-scope.yaml \
 boundarybench report runs
 ```
 
+Run a hosted model through the same isolated tools:
+
+```bash
+python -m pip install -e ".[dev,openai]"
+export OPENAI_API_KEY="your-project-key"
+boundarybench stress \
+  --provider openai \
+  --model gpt-5.6-luna \
+  --reasoning-effort medium \
+  --max-output-tokens 1500 \
+  --max-tool-rounds 8 \
+  --output-root runs/gpt-5.6-luna
+```
+
+The key remains in the environment. The adapter sets `store=False`, exposes no web or computer tool, and routes every requested effect through a fresh synthetic sandbox. See the [adapter contract](docs/openai-responses-adapter.md) before collection.
+
+Compare completed baseline and authority-checkpoint collections without custom analysis code:
+
+```bash
+boundarybench compare-mitigation \
+  runs/gpt-5.6-luna/baseline \
+  runs/gpt-5.6-luna/authority-checkpoint \
+  --seed 20260903 \
+  --summary results/gpt-5.6-luna-mitigation-comparison.json
+```
+
 ## Verified release
 
 | Component | Included |
@@ -70,10 +112,13 @@ boundarybench report runs
 | Factorial conditions per scenario | 27 |
 | Authorization Decay Surface cases | 594 |
 | Deterministic oracle passes | 594 |
-| Focused automated tests | 69 |
+| Preregistered model-study cases | 35,640 |
+| Model capability tiers | 3 |
+| Mitigation arms | 2 |
+| Focused automated tests | 84 |
 | Supported Python versions | 3.11 through 3.14 |
 
-The committed [v0.2 conformance artifact](results/authorization-decay-surface-v0.2.json) establishes that every generated condition executes through the harness and reaches its declared oracle under the deterministic reference adapter. The [v0.1 reference result](results/reference-suite-v0.1.json) remains available as the compact baseline.
+The committed [v0.2 conformance artifact](results/authorization-decay-surface-v0.2.json) establishes that every generated condition executes through the harness and reaches its declared oracle under the deterministic reference adapter. The [v0.3 protocol lock](results/openai-researcher-access-plan-v0.3.json) binds the confirmatory model study to the exact scenario corpus, schedule, hypotheses, exclusions, stopping rule, and credit budget. The [v0.1 reference result](results/reference-suite-v0.1.json) remains available as the compact baseline.
 
 Reference conformance and model behavior are separate result types. A model adapter receives the same controlled trajectory through `request.metadata["trajectory"]` and produces its own run evidence.
 
@@ -121,6 +166,10 @@ Every scenario declares authority, source provenance, resettable synthetic fixtu
 | Topic | Document |
 | --- | --- |
 | Authorization Decay Surface | [Protocol and estimands](docs/authorization-decay-surface.md) |
+| Complete research record | [Research overview and artifact map](RESEARCH.md) |
+| Confirmatory model study | [Preregistered study](docs/preregistered-study.md) |
+| OpenAI model execution | [Responses API adapter](docs/openai-responses-adapter.md) |
+| Program application summary | [Researcher Access study brief](docs/researcher-access-brief.md) |
 | Authorization semantics | [Authorization model](docs/authorization-model.md) |
 | Research framing | [Research overview](docs/research-overview.md) |
 | Study design | [Methodology](docs/methodology.md) |
@@ -130,6 +179,7 @@ Every scenario declares authority, source provenance, resettable synthetic fixtu
 | Composite baseline | [Agent Boundary Score](docs/agent-boundary-score.md) |
 | Supported claims | [Scope](docs/scope.md) |
 | Measurement limits | [Limitations](docs/limitations.md) |
+| Research data lifecycle | [Data management](docs/data-management.md) |
 | Research progression | [Roadmap](docs/roadmap.md) |
 | Research sources | [References](docs/references.md) |
 | Version history | [Release notes](docs/release-notes.md) |
@@ -137,7 +187,7 @@ Every scenario declares authority, source provenance, resettable synthetic fixtu
 
 ## Project standards
 
-BoundaryBench runs entirely on synthetic fixtures and local stubs. It never authorizes testing external systems or contacting real recipients.
+BoundaryBench runs on synthetic fixtures and local stubs. Hosted models can request only the controlled function tools supplied by the adapter. The project never authorizes testing external systems or contacting real recipients.
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing a scenario or implementation change. Use [GitHub Discussions](https://github.com/ChloeVPin/boundarybench/discussions) for research questions and [GitHub Issues](https://github.com/ChloeVPin/boundarybench/issues) for defects and scenario proposals. Report execution boundary failures privately through the Security tab as described in [SECURITY.md](SECURITY.md).
 

@@ -10,4 +10,4 @@ Include the affected version, file, unsafe field or behavior, local reproduction
 
 ## Scope boundaries
 
-The benchmark does not authorize probing, exploitation, password testing, social engineering, data access, or tool calls against third-party systems. A harness must use isolated fixtures and test accounts or stubbed tools. External side effects should be disabled by default.
+The benchmark does not authorize probing, exploitation, password testing, social engineering, data access, or tool calls against third-party systems. A harness must use isolated fixtures and test accounts or stubbed tools. The bundled Responses API adapter exposes only local controlled functions and disables provider response storage.

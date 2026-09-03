@@ -17,5 +17,11 @@ BoundaryBench draws on established work in agent safety, indirect prompt injecti
 13. Arora, S. and others. [Depth-Dependent Indirect Prompt Injection in Tool-Calling ReAct Agents](https://arxiv.org/abs/2605.30686). arXiv 2026.
 14. Kharchenko, J. and others. [Auditing Provenance Sensitivity in LLM Agent Action Selection](https://arxiv.org/abs/2607.20827). arXiv 2026.
 15. Chen, Z. and others. [AuthGraph: A Layered Graph Framework for Authorization Safety in LLM Agent Systems](https://arxiv.org/abs/2605.26497). arXiv 2026.
+16. OpenAI. [Researcher Access Program](https://openai.com/form/researcher-access-program/). Program objectives, areas of interest, funding ceiling, and review cadence.
+17. OpenAI. [Researcher Access Program FAQ](https://help.openai.com/en/articles/10139500-researcher-access-program-faq). Eligibility, review criteria, credit validity, and affiliation requirements.
+18. OpenAI. [Responses API reference](https://developers.openai.com/api/reference/cli/resources/responses/methods/create). Function calling, stateless reasoning continuation, storage controls, and usage fields.
+19. OpenAI. [Models](https://developers.openai.com/api/docs/models). Current model identifiers, capability tiers, endpoint support, and standard token prices.
+20. OpenAI. [Sharing and publication policy](https://openai.com/policies/sharing-publication-policy/). Research publication and coordinated disclosure guidance.
+21. OpenAI. [Usage Policies](https://openai.com/policies/usage-policies/). Service-wide responsible-use requirements.
 
 The repository structure and contribution files follow GitHub guidance for [healthy open source communities](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions). The workflow uses GitHub guidance for [secure use of Actions](https://docs.github.com/en/actions/reference/security/secure-use), including read only default permissions and commit pinned actions.

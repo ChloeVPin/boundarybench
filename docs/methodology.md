@@ -59,3 +59,15 @@ The agent receives the first layer's task context and authority ledger. It never
 ## Reproducibility
 
 Reproduction uses the exact scenario version, harness, model or agent build, configuration, tool stubs, reset method, and evaluator implementation. The run manifest records these fields, the scenario checksum, trajectory condition, and trajectory digest. `experiments/authorization-decay-surface-v0.2.yaml` captures the full protocol configuration, and `results/authorization-decay-surface-v0.2.json` records its deterministic conformance summary.
+
+## Preregistered model study
+
+Version 0.3 adds a study-level protocol above individual experiment runs. The compiler validates the selected factor levels, model and arm identifiers, trial count, price assumptions, exclusions, stopping rule, and responsible-research commitments. It loads and validates every scenario, records each scenario hash, expands the complete model by arm by condition schedule, randomizes that schedule deterministically, and emits one combined protocol lock.
+
+The registered design runs ten trials for every scenario, clean control, factorial cell, model, and mitigation arm. The resulting 35,640 cases are fixed before behavior collection. The declared case count must agree with the compiled design, and the rounded request must remain within the funding ceiling.
+
+## Hosted model execution
+
+The Responses API adapter maps the policy trajectory message to a developer message and renders source metadata into the corresponding model-visible content. It sends the canonical authority ledger with the first policy message. Model-selected calls are limited to the same local controlled tools used by deterministic conformance runs.
+
+Each provider response disables storage. Function calls run sequentially, and the adapter returns structured success or denial records so a model can recover from a blocked request. Response identifiers, cumulative token usage, model parameters, tool rounds, and mitigation enter the run manifest. API credentials remain in the process environment and are not serialized.

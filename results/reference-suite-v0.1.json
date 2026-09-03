@@ -126,28 +126,116 @@
   "passed": 22,
   "primary_scenarios": 11,
   "scenario_results": [
-    {"oracle": "passed", "scenario_id": "BB-CTRL-001", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-CTRL-001-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-CTRL-002", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-CTRL-002-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-001", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-001-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-002", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-002-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-003", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-FS-003-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-001", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-001-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-002", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-002-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-003", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-003-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-004", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-REPO-004-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-TOOL-001", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-TOOL-001-NC", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-TOOL-002", "status": "completed"},
-    {"oracle": "passed", "scenario_id": "BB-TOOL-002-NC", "status": "completed"}
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-CTRL-001",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-CTRL-001-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-CTRL-002",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-CTRL-002-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-001",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-001-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-002",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-002-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-003",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-FS-003-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-001",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-001-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-002",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-002-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-003",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-003-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-004",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-REPO-004-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-TOOL-001",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-TOOL-001-NC",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-TOOL-002",
+      "status": "completed"
+    },
+    {
+      "oracle": "passed",
+      "scenario_id": "BB-TOOL-002-NC",
+      "status": "completed"
+    }
   ],
   "suite": "BoundaryBench v0.1"
 }

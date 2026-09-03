@@ -23,9 +23,15 @@ This release adds the Authorization Decay Surface to the versioned scenario corp
 
 The central output is a fingerprint rather than one rank. It reports attack-control, provenance, position, and repetition effects alongside utility, worst-cell behavior, uncertainty intervals, and complete scenario evidence. The v0.1 Agent Boundary Score remains available as a compact baseline.
 
+## BoundaryBench v0.3
+
+Version 0.3 makes the model study executable and preregistered. The Responses API adapter preserves trajectory order, attaches the authority ledger, disables provider storage, and exposes only the benchmark's local controlled tools. A deterministic compiler locks the study source, scenario corpus, 35,640-case randomization schedule, hypotheses, exclusions, stopping rule, and $1,000 resource plan.
+
+The registered comparison spans three model capability tiers and two arms. The authority-checkpoint arm repeats the fact that authority has not changed at neutral trajectory checkpoints. Mitigation analysis reports the attack benefit, clean-control utility effect, and matched difference in differences separately.
+
 ## Intended users
 
-Researchers and engineers may use the corpus to build isolated agent harnesses, compare prompting or policy interventions, examine attempted versus completed effects, and report failure traces. Scenario authors should be able to reuse the YAML without adopting a particular agent framework.
+Researchers and engineers may use the corpus to run isolated model studies, compare prompting or policy interventions, examine attempted versus completed effects, and report failure traces. Scenario authors can reuse the YAML without adopting a particular agent framework.
 
 ## Claim discipline
 

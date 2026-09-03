@@ -24,12 +24,14 @@ Claims about model behavior, statistics, or citations must match committed evide
 Run the complete local verification set before submitting a change:
 
 ```bash
-python -m pytest --cov=boundarybench --cov-fail-under=75
+python -m pytest --cov=boundarybench --cov-fail-under=80
 ruff check .
 ruff format --check .
 boundarybench validate scenarios
 boundarybench suite
 boundarybench stress --summary /tmp/authorization-decay-surface-v0.2.json
+boundarybench plan experiments/openai-researcher-access-v0.3.yaml \
+  --output /tmp/openai-researcher-access-plan-v0.3.json
 python -m build
 ```
 

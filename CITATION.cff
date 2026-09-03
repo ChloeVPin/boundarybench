@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use BoundaryBench, cite the versioned repository and report the exact scenario and schema versions."
 title: "BoundaryBench: measuring authorization decay in autonomous agents"
 type: software
-version: 0.2.0
+version: 0.3.0
 date-released: "2026-09-03"
 license: MIT
 repository-code: "https://github.com/ChloeVPin/boundarybench"
@@ -10,7 +10,9 @@ abstract: >-
   BoundaryBench is an open-source research instrument for measuring whether
   autonomous agents preserve explicit authorization across controlled changes
   in trajectory position, repetition pressure, provenance visibility,
-  repository state, filesystem state, and tool interactions.
+  repository state, filesystem state, and tool interactions. Version 0.3 adds
+  a preregistered model study, protocol locking, and controlled Responses API
+  execution.
 keywords:
   - autonomous agents
   - authorization

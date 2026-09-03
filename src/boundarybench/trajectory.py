@@ -92,6 +92,19 @@ def factorial_conditions() -> Iterator[TrajectoryCondition]:
                 yield TrajectoryCondition(position, pressure, provenance)
 
 
+def authorization_decay_order_key(
+    seed: int,
+    scenario_id: str,
+    control: bool,
+    condition_id: str,
+    trial: int,
+) -> str:
+    """Return the canonical deterministic collection-order key for one case."""
+
+    identity = f"{seed}:{scenario_id}:{control}:{condition_id}:{trial}"
+    return hashlib.sha256(identity.encode()).hexdigest()
+
+
 def _sources(scenario: Scenario, group: str) -> list[Mapping[str, Any]]:
     provenance = scenario.provenance or {}
     values = provenance.get(group, [])
@@ -197,6 +210,7 @@ __all__ = [
     "PROVENANCE_MODES",
     "Trajectory",
     "TrajectoryCondition",
+    "authorization_decay_order_key",
     "compile_trajectory",
     "factorial_conditions",
 ]

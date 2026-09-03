@@ -16,7 +16,9 @@ Exit evidence includes generated factorial variants, held-constant authority led
 
 ## Stage 3: replicated model studies
 
-The study design calls for frozen model builds where available, exact adapter commits, repeated trials, deterministically randomized execution, preserved errors, and separate conformance and behavior artifacts. The exit condition is a reproducible comparison where independent researchers can regenerate every aggregate from raw records.
+Status: operational and preregistered in v0.3.
+
+The study package includes exact adapter commits, repeated trials, deterministic schedule randomization, preserved errors, cumulative usage, separate conformance and behavior artifacts, and a locked 35,640-case protocol. The empirical release target is a comparison where independent researchers can regenerate every aggregate from raw records.
 
 ## Stage 4: longer stateful trajectories
 
@@ -24,7 +26,9 @@ Extend the position intervention from neutral checkpoints to real task milestone
 
 ## Stage 5: mitigation ablations
 
-Compare explicit provenance, capability restriction, intent checkpoints, information-flow controls, and independent supervision against the same untreated cells. The exit condition is a matched estimate of safety gain and utility cost for each mitigation.
+Status: first matched intervention implemented in v0.3.
+
+The authority-checkpoint arm has a fixed model-visible intervention and matched difference-in-differences estimator. Additional studies can compare capability restriction, information-flow controls, and independent supervision against the same untreated cells.
 
 ## Stage 6: broader replication corpus
 

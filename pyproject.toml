@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "boundarybench"
-version = "0.2.0"
-description = "Reproducible infrastructure for studying authorization preservation in autonomous AI agents"
+version = "0.3.0"
+description = "Preregistered evaluation infrastructure for authorization preservation in AI agents"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Project Boundary contributors" }]
-keywords = ["ai-agents", "authorization", "benchmark", "prompt-injection", "safety"]
+keywords = ["ai-agents", "authorization", "benchmark", "evaluation", "prompt-injection", "safety"]
 dependencies = [
   "PyYAML>=6.0,<7",
 ]
@@ -28,10 +28,15 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/ChloeVPin/boundarybench"
 Documentation = "https://github.com/ChloeVPin/boundarybench#readme"
+Research = "https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md"
+Changelog = "https://github.com/ChloeVPin/boundarybench/blob/main/docs/release-notes.md"
 Issues = "https://github.com/ChloeVPin/boundarybench/issues"
 Source = "https://github.com/ChloeVPin/boundarybench"
 
 [project.optional-dependencies]
+openai = [
+  "openai>=2.0,<3",
+]
 dev = [
   "build>=1.2,<2",
   "jsonschema>=4.23,<5",
@@ -51,6 +56,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 addopts = "-ra"
 
 [tool.ruff]

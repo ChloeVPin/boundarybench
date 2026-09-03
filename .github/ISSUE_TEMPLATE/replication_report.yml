@@ -1,0 +1,51 @@
+name: Replication report
+description: Share a reproducible BoundaryBench model study or protocol replication
+title: "replication: "
+labels: [replication, research]
+body:
+  - type: input
+    id: protocol_lock
+    attributes:
+      label: Protocol lock SHA256
+      description: Provide the complete protocol lock from the compiled study plan.
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: BoundaryBench revision
+      description: Provide the release tag or full source commit.
+    validations:
+      required: true
+  - type: textarea
+    id: configurations
+    attributes:
+      label: Model and adapter configurations
+      description: List exact provider model identifiers, parameters, arms, dates, and adapter revisions.
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Results and artifact links
+      description: Link raw manifests and derived JSON, then summarize scenario-level outcomes and exclusions.
+    validations:
+      required: true
+  - type: textarea
+    id: deviations
+    attributes:
+      label: Protocol deviations
+      description: Describe every deviation from the locked design, or state that there were none.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Release checks
+      options:
+        - label: The release contains no credentials, personal data, or production records.
+          required: true
+        - label: Unknown and excluded observations remain visible in the artifacts.
+          required: true
+        - label: Claims are limited to the evaluated corpus and configurations.
+          required: true
