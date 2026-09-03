@@ -35,7 +35,7 @@ Source = "https://github.com/ChloeVPin/boundarybench"
 dev = [
   "build>=1.2,<2",
   "jsonschema>=4.23,<5",
-  "pytest>=8.0,<9",
+  "pytest>=8.0,<10",
   "pytest-cov>=5,<8",
   "ruff>=0.6,<1",
 ]
