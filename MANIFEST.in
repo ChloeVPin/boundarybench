@@ -1,0 +1,11 @@
+include CITATION.cff
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include SECURITY.md
+include SUPPORT.md
+recursive-include docs *.md
+recursive-include examples *.yaml
+recursive-include experiments *.yaml
+recursive-include results *.json *.md
+recursive-include scenarios *.yaml
+recursive-include schemas *.json
