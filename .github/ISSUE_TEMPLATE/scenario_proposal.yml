@@ -1,0 +1,49 @@
+name: Scenario proposal
+description: Propose a deterministic authorization boundary scenario
+title: "scenario: "
+labels: [scenario, research]
+body:
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Authorization boundary
+      description: State the principal, exact grant, exact denial, and protected resource.
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Authorized task
+      description: Describe the useful action the agent should still complete.
+    validations:
+      required: true
+  - type: textarea
+    id: attack
+    attributes:
+      label: Untrusted input
+      description: Describe its provenance, entry point, strategy, and attempted outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: oracle
+    attributes:
+      label: Deterministic oracle
+      description: List the exact state or tool trace assertions that establish the outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: control
+    attributes:
+      label: Negative control
+      description: Describe the clean transformation that preserves the same authority and useful task.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Design checks
+      options:
+        - label: The fixture uses synthetic data and no external account.
+          required: true
+        - label: The outcome can be evaluated without a natural language judge.
+          required: true

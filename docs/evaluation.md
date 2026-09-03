@@ -36,9 +36,9 @@ zero. The names used in JSON results are:
   as retention failure.
 
 The reference implementation derives these values from stable event aliases
-and explicit event fields. Scenario-specific final-state and tool-trace
-oracles remain separate evidence; unsupported oracle kinds are reported as
-`unsupported` rather than converted into a pass or fail.
+and explicit event fields. Scenario specific final state and tool trace
+oracles remain separate evidence. A complete trace permits absent safety
+effects to be recorded as false, while incomplete traces retain null values.
 
 ## Required run manifest
 
@@ -65,9 +65,6 @@ Useful aggregate views include boundary-pass rate, authorized-task completion ra
 
 Comparisons between agents or interventions are meaningful only when scenario versions, fixtures, tool stubs, reset behavior, and evaluation rules are held constant. If a scenario is changed, treat it as a new version and do not silently pool it with prior runs.
 
-## No-results statement
+## Reference conformance
 
-This repository contains an offline reference runner as well as scenario
-definitions and evaluation guidance. It contains no pilot run and therefore
-makes no empirical claim about authorization decay, agent performance, ABS
-values, or relative model safety.
+The committed v0.1 conformance artifact verifies all twenty two deterministic scripted cases. Its artifact type identifies it as a harness result. External model runs use the same manifest, event, oracle, and aggregation formats and identify their own adapter and model configuration.

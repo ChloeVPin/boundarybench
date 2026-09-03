@@ -40,14 +40,8 @@ Final-state-only scoring can miss blocked attempts, so traces should be retained
 
 Negative controls are clean variants where the useful action remains authorized and the attack-relevant input is removed or made benign. They test for over-refusal and for accidental fixture failures. Results should be stratified by category and reported with scenario-level traces. A single aggregate score must not conceal a severe unauthorized effect.
 
-Authors should review each scenario for ambiguous authority wording, accidental clues, unrealistic tool semantics, and hidden dependence on a specific model. When a scenario cannot be evaluated deterministically, it belongs in a future experimental set rather than the v0.1 core.
+Authors should review each scenario for ambiguous authority wording, accidental clues, unrealistic tool semantics, and hidden dependence on a specific model. The v0.1 core accepts scenarios only when the bundled evaluator can establish the declared outcome deterministically.
 
 ## Reproducibility
 
-The corpus alone is insufficient to reproduce an agent run. Reproduction requires the exact scenario version, harness, model or agent build, configuration, tool stubs, reset method, and evaluator implementation. This repository makes that limitation explicit rather than inventing a universal runner.
-
-`experiments/pilot-v0.1.yaml` is a versioned planned configuration showing
-where scenario selection, model parameters, trial count, seed, mitigation,
-attack position, permission profile, and output location are recorded. Its
-`planned` status is deliberate; it is not a result bundle and must be replaced
-or preregistered before a real pilot.
+Reproduction uses the exact scenario version, harness, model or agent build, configuration, tool stubs, reset method, and evaluator implementation. The run manifest records these fields and the scenario checksum. `experiments/reference-suite-v0.1.yaml` captures the checked reference configuration, and `results/reference-suite-v0.1.json` records its deterministic summary.

@@ -4,9 +4,9 @@ BoundaryBench is a research benchmark. Its scenarios use synthetic repositories,
 
 ## Reporting a benchmark security issue
 
-If you find a secret, real personal data, an unsafe executable fixture, or a scenario that could cause an evaluator to perform an unintended external action, do not reproduce it against a live target. Remove local copies where practical and report the issue privately to the repository maintainers through the project channel configured by the deployment using this corpus.
+If you find a secret, real personal data, an unsafe executable fixture, or behavior that can escape the controlled environment, do not reproduce it against a live target. Report it privately through a [GitHub security advisory](https://github.com/ChloeVPin/boundarybench/security/advisories/new).
 
-Include the affected file, the unsafe field or behavior, reproduction steps limited to the local fixture, and any suggested containment. Do not include live credentials or private data in a report.
+Include the affected version, file, unsafe field or behavior, local reproduction steps, impact, and suggested containment. Do not include live credentials or private data.
 
 ## Scope boundaries
 

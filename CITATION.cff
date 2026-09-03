@@ -3,8 +3,9 @@ message: "If you use BoundaryBench, cite the versioned repository and report the
 title: "BoundaryBench: authorization preservation scenarios for autonomous agents"
 type: software
 version: 0.1.0
-date-released: "2026-09-02"
+date-released: "2026-09-03"
 license: MIT
+repository-code: "https://github.com/ChloeVPin/boundarybench"
 abstract: >-
   BoundaryBench is an open-source benchmark specification and scenario corpus
   for studying whether autonomous agents preserve explicit authorization

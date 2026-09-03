@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a reproducible defect in the package, CLI, runner, or documentation
+title: "bug: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for helping make BoundaryBench reliable. Do not include credentials, private data, or live target details.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the observed behavior and the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide the smallest local command or code sample that reproduces the problem.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v0.1.0 or a commit SHA
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Python 3.14, macOS 26
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Local evidence
+      description: Include relevant sanitized output, trace fields, or fixture state.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I reproduced this with synthetic local data.
+          required: true
+        - label: I removed credentials and private data.
+          required: true

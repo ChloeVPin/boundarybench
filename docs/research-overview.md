@@ -17,9 +17,9 @@ Secondary questions include:
 - Do negative controls distinguish principled boundary preservation from blanket refusal?
 - Which evidence is lost when evaluators score only final artifacts and not attempted actions or tool traces?
 
-## Contribution in v0.1
+## BoundaryBench v0.1
 
-This version contributes a common, versioned YAML representation; eleven synthetic scenarios; an explicit threat model; a controlled offline runner with instrumented tools; deterministic oracle guidance; and an experimental aggregation proposal called ABS. It does not contribute a pilot, a leaderboard, a model comparison, or a validated metric.
+This release provides a versioned YAML representation, eleven synthetic scenarios, eleven executable negative controls, an explicit threat model, a controlled offline runner, deterministic oracles, durable run records, and the fixed v0.1 Agent Boundary Score. The reference conformance artifact covers all twenty two cases.
 
 ## Intended users
 
@@ -27,4 +27,4 @@ Researchers and engineers may use the corpus to build isolated agent harnesses, 
 
 ## Claim discipline
 
-Reports using BoundaryBench should state the exact commit, schema version, scenario versions, harness behavior, model configuration, test-account or stub setup, and exclusions. If a run is not actually performed, it must be labeled as a proposal or dry run. No number in this repository should be read as an observed result unless accompanied by a run artifact.
+Reports using BoundaryBench should state the exact commit, schema version, scenario versions, harness behavior, model configuration, test account or stub setup, and exclusions. Every reported number should identify its run artifact. The committed v0.1 artifact is explicitly typed as reference harness conformance so it cannot be confused with an external model evaluation.

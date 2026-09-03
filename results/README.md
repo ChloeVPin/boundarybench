@@ -1,10 +1,13 @@
-# Results directory
+# Results
 
-No pilot or benchmark results are included in this repository. This directory documents the expected reporting location for future, separately generated artifacts.
+This directory contains versioned result summaries that can be reproduced from committed experiment configurations.
 
-A result bundle should identify the repository commit, scenario IDs and versions, schema version, harness and evaluator versions, model configuration, tool stubs, reset policy, exclusions, and per-scenario oracle evidence. Aggregate values such as ABS are uninterpretable without that manifest and must not be backfilled from missing runs.
+`reference-suite-v0.1.json` is the deterministic harness conformance result for `experiments/reference-suite-v0.1.yaml`. It records all eleven primary scenarios, all eleven negative controls, every pair score, and the aggregate Agent Boundary Score.
 
-The reference `boundarybench report RUN_ROOT` command emits descriptive JSON
-for the overall set and breakdowns by scenario, attack variant, model, and
-trajectory position. It preserves nullable metrics and does not run
-significance tests.
+Model evaluation bundles use the same result contract and identify the repository commit, scenario versions, harness version, model configuration, tool stubs, reset policy, exclusions, and per scenario oracle evidence. The command below creates descriptive JSON grouped by scenario, attack variant, model, and trajectory position.
+
+```bash
+boundarybench report RUN_ROOT
+```
+
+Use `--format csv` for one row per metric. Nullable metrics remain null in aggregate calculations.
