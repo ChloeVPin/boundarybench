@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://boundarybench.local/schemas/scenario.schema.json",
+  "title": "BoundaryBench scenario",
+  "description": "Versioned, runner-independent BoundaryBench v0.1 scenario.",
+  "type": "object",
+  "required": ["id", "version"],
+  "anyOf": [
+    {
+      "required": ["schema_version", "title", "category", "difficulty", "summary", "authority", "provenance", "attacker", "fixture", "task", "expected_behavior", "evaluation", "negative_control"]
+    },
+    { "required": ["policy"] }
+  ],
+  "properties": {
+    "version": { "enum": ["0.1", "0.1.0", 0.1] },
+    "schema_version": { "const": "0.1" },
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "category": { "enum": ["repository", "filesystem", "tools", "controls"] },
+    "difficulty": { "enum": ["basic", "intermediate", "advanced"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "metadata": { "type": "object" },
+    "authority": { "$ref": "#/$defs/authority" },
+    "provenance": { "type": "object" },
+    "attacker": { "type": "object" },
+    "fixture": { "type": "object" },
+    "task": { "type": "object" },
+    "expected_behavior": { "type": "object" },
+    "evaluation": { "type": "object" },
+    "negative_control": { "type": "object" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "authorization": { "$ref": "#/$defs/policy", "deprecated": true }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "operation": { "enum": ["read", "write", "execute", "network"] },
+    "effect": { "enum": ["allow", "deny"] },
+    "targets": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "required": ["effect", "operation"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "effect": { "$ref": "#/$defs/effect" },
+        "operation": { "$ref": "#/$defs/operation" },
+        "target": { "$ref": "#/$defs/targets" },
+        "targets": { "$ref": "#/$defs/targets" }
+      },
+      "additionalProperties": true,
+      "anyOf": [{ "required": ["target"] }, { "required": ["targets"] }]
+    },
+    "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } },
+    "operationTargets": {
+      "oneOf": [
+        { "$ref": "#/$defs/targets" },
+        {
+          "type": "object",
+          "properties": {
+            "target": { "$ref": "#/$defs/targets" },
+            "targets": { "$ref": "#/$defs/targets" },
+            "paths": { "$ref": "#/$defs/targets" },
+            "destinations": { "$ref": "#/$defs/targets" }
+          },
+          "additionalProperties": true,
+          "anyOf": [
+            { "required": ["target"] },
+            { "required": ["targets"] },
+            { "required": ["paths"] },
+            { "required": ["destinations"] }
+          ]
+        }
+      ]
+    },
+    "operationMap": {
+      "type": "object",
+      "properties": {
+        "read": { "$ref": "#/$defs/operationTargets" },
+        "write": { "$ref": "#/$defs/operationTargets" },
+        "execute": { "$ref": "#/$defs/operationTargets" },
+        "network": { "$ref": "#/$defs/operationTargets" }
+      },
+      "additionalProperties": true
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "rules": { "$ref": "#/$defs/rules" },
+        "allow": { "$ref": "#/$defs/operationMap" },
+        "deny": { "$ref": "#/$defs/operationMap" }
+      },
+      "additionalProperties": true,
+      "minProperties": 1
+    },
+    "authorityEntry": {
+      "type": "object",
+      "required": ["action", "resource", "conditions"],
+      "properties": {
+        "action": { "type": "string", "minLength": 1 },
+        "resource": { "type": "string", "minLength": 1 },
+        "conditions": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": true
+    },
+    "authority": {
+      "type": "object",
+      "required": ["principal", "grants", "denials", "decision_rule"],
+      "properties": {
+        "principal": { "type": "string", "minLength": 1 },
+        "grants": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/authorityEntry" } },
+        "denials": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/authorityEntry" } },
+        "decision_rule": { "const": "trusted_grants_only" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

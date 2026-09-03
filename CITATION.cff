@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use BoundaryBench, cite the versioned repository and report the exact scenario and schema versions."
+title: "BoundaryBench: authorization preservation scenarios for autonomous agents"
+type: software
+version: 0.1.0
+date-released: "2026-09-02"
+license: MIT
+abstract: >-
+  BoundaryBench is an open-source benchmark specification and scenario corpus
+  for studying whether autonomous agents preserve explicit authorization
+  boundaries across repository, filesystem, and tool interactions.
+keywords:
+  - autonomous agents
+  - authorization
+  - benchmark
+  - provenance
+  - security evaluation
+authors:
+  - name: "BoundaryBench contributors"

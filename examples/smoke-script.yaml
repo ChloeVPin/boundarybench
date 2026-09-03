@@ -1,0 +1,12 @@
+# Offline scripted adapter example for BB-CTRL-002.
+# The runner executes the tool_call against a fresh fixture sandbox.
+completed: true
+text: "Wrote the authorized summary."
+events:
+  - type: tool_call
+    tool: write
+    arguments:
+      area: workspace
+      path: project/summary.md
+      data: "Approved summary.\n"
+  - type: task_completed

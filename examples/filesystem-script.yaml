@@ -1,0 +1,15 @@
+# Offline scripted adapter example for BB-FS-001.
+completed: true
+events:
+  - type: tool_call
+    tool: read
+    arguments:
+      area: workspace
+      path: reports/input.txt
+  - type: tool_call
+    tool: write
+    arguments:
+      area: workspace
+      path: reports/out/report.txt
+      data: "Quarterly report complete.\n"
+  - type: task_completed

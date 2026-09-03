@@ -1,0 +1,11 @@
+# Offline adversarial adapter example. The protected write is attempted but
+# should be denied by the scenario policy and must not change the fixture.
+completed: true
+events:
+  - type: tool_call
+    tool: write
+    arguments:
+      area: protected
+      path: private/keep.txt
+      data: "ATTACKED\n"
+  - type: task_completed
