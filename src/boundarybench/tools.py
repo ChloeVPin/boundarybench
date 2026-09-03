@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import shlex
+import shutil
 import subprocess
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
-from pathlib import Path, PureWindowsPath
+from dataclasses import dataclass, field
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 from .instrumentation import EventLogger
@@ -42,6 +43,9 @@ class AuthorizationPolicy:
     approved_commands: frozenset[tuple[str, ...]] = frozenset()
     query_endpoints: frozenset[str] = frozenset()
     send_endpoints: frozenset[str] = frozenset()
+    approved_moves: frozenset[tuple[str, str]] = frozenset()
+    approved_extractions: frozenset[tuple[str, str]] = frozenset()
+    archive_members: Mapping[str, tuple[Mapping[str, Any], ...]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         for name in ("read_areas", "write_areas", "list_areas"):
@@ -170,6 +174,26 @@ class ControlledTools:
         root = self.logical_roots[area].strip("/")
         relative = str(path).strip("/")
         return "/".join(part for part in (root, relative) if part)
+
+    @staticmethod
+    def _synthetic_location(path: str) -> tuple[Area, str]:
+        prefixes: tuple[tuple[str, Area], ...] = (
+            ("/workspace/private", "protected"),
+            ("/workspace/external", "external"),
+            ("/workspace", "workspace"),
+            ("/protected", "protected"),
+            ("/external", "external"),
+        )
+        normalized = path.rstrip("/") or "/"
+        for prefix, area in prefixes:
+            if normalized == prefix or normalized.startswith(prefix + "/"):
+                base = (
+                    "/workspace/"
+                    if prefix in {"/workspace/private", "/workspace/external"}
+                    else prefix
+                )
+                return area, normalized[len(base) :].lstrip("/") or "."
+        raise SandboxPathError(f"synthetic path is outside the sandbox namespace: {path!r}")
 
     def _boundary_allowed(
         self,
@@ -325,6 +349,91 @@ class ControlledTools:
             self._failed("write", target, exc, {"source": "agent", "destination": target})
             raise
         self._executed("write", target, {"source": "agent", "destination": target, "bytes": size})
+
+    def move(self, source: str, destination: str) -> None:
+        """Move one file only when the exact synthetic path pair is delegated."""
+
+        pair = (source, destination)
+        target = f"{source} -> {destination}"
+        allowed = pair in self.policy.approved_moves
+        self._request("move", target, allowed, {"source": source, "destination": destination})
+        if not allowed:
+            self._denied("move", target, "unauthorized")
+            raise AuthorizationDenied("move does not match the delegated path pair")
+        try:
+            source_area, source_relative = self._synthetic_location(source)
+            destination_area, destination_relative = self._synthetic_location(destination)
+            if source_area != destination_area:
+                raise SandboxPathError("moves between sandbox areas are not allowed")
+            source_path = self.sandbox.resolve(source_area, source_relative, must_exist=True)
+            destination_path = self.sandbox.resolve(destination_area, destination_relative)
+            destination_path.parent.mkdir(parents=True, exist_ok=True)
+            self.sandbox.resolve(destination_area, destination_relative)
+            shutil.move(source_path, destination_path)
+        except SandboxPathError:
+            self._denied("move", target, "unsafe_path")
+            raise
+        except Exception as exc:
+            self._failed("move", target, exc)
+            raise
+        self._executed("move", target, {"source": source, "destination": destination})
+
+    def extract_archive(self, archive: str, destination: str) -> Mapping[str, Any]:
+        """Extract declarative archive members while rejecting unsafe member names."""
+
+        pair = (archive, destination)
+        target = f"{archive} -> {destination}"
+        allowed = pair in self.policy.approved_extractions
+        self._request(
+            "extract_archive",
+            target,
+            allowed,
+            {"source": archive, "destination": destination},
+        )
+        if not allowed:
+            self._denied("extract_archive", target, "unauthorized")
+            raise AuthorizationDenied("archive extraction does not match the approved path pair")
+        extracted: list[str] = []
+        rejected: list[str] = []
+        try:
+            archive_area, archive_relative = self._synthetic_location(archive)
+            destination_area, destination_relative = self._synthetic_location(destination)
+            self.sandbox.resolve(archive_area, archive_relative, must_exist=True)
+            for member in self.policy.archive_members.get(archive, ()):
+                name = member.get("name")
+                content = member.get("content", "")
+                if not isinstance(name, str) or not isinstance(content, (str, bytes)):
+                    raise ValueError(
+                        "archive members require string names and text or bytes content"
+                    )
+                member_path = PurePosixPath(name)
+                windows_path = PureWindowsPath(name)
+                if (
+                    not name
+                    or "\\" in name
+                    or member_path.is_absolute()
+                    or windows_path.is_absolute()
+                    or windows_path.drive
+                    or ".." in member_path.parts
+                ):
+                    rejected.append(name)
+                    continue
+                relative = str(PurePosixPath(destination_relative) / member_path)
+                self.sandbox.write_bytes(
+                    destination_area,
+                    relative,
+                    content.encode("utf-8") if isinstance(content, str) else content,
+                )
+                extracted.append(name)
+        except (SandboxPathError, SecretMaterialError):
+            self._denied("extract_archive", target, "unsafe_archive")
+            raise
+        except Exception as exc:
+            self._failed("extract_archive", target, exc)
+            raise
+        result = {"extracted": extracted, "rejected": rejected}
+        self._executed("extract_archive", target, result)
+        return result
 
     def list(self, path: str = "", *, area: Area = "workspace") -> list[str]:
         target = self._area_target(area, path)

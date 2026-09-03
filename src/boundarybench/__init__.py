@@ -24,8 +24,10 @@ from .scenarios import (
     ScenarioValidationError,
     ValidationIssue,
     load_scenario,
+    negative_control_variant,
     parse_scenario,
 )
+from .suite import SuiteResult, run_reference_suite
 from .tools import ControlledTools, StubCallRecord
 
 __all__ = [
@@ -52,6 +54,7 @@ __all__ = [
     "SandboxPathError",
     "ScriptedAgent",
     "ScriptedStep",
+    "SuiteResult",
     "StubCallRecord",
     "SUPPORTED_VERSION",
     "SUPPORTED_SCENARIO_VERSIONS",
@@ -59,6 +62,8 @@ __all__ = [
     "canonicalize_destination",
     "canonicalize_path",
     "load_scenario",
+    "negative_control_variant",
     "parse_scenario",
     "run_scenario",
+    "run_reference_suite",
 ]

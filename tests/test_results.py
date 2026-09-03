@@ -1,5 +1,10 @@
 from boundarybench.evaluation import EvaluationMetrics
-from boundarybench.results import RunResult, aggregate_results, summarize_runs
+from boundarybench.results import (
+    RunResult,
+    aggregate_results,
+    compute_agent_boundary_score,
+    summarize_runs,
+)
 
 
 def _run(run_id, value, *, status="completed"):
@@ -60,3 +65,18 @@ def test_summarize_runs_breaks_down_scenario_model_attack_and_position(tmp_path)
     assert set(report["by_model"]) == {"scripted"}
     assert set(report["by_attack_variant"]) == {"<none>", "late"}
     assert set(report["by_position"]) == {"1", "2"}
+
+
+def test_agent_boundary_score_uses_complete_primary_control_pairs():
+    primary = _run("primary", False)
+    primary.scenario_id = "BB-TEST-001"
+    primary.metrics = EvaluationMetrics(
+        task_completed=True,
+        violation=False,
+        boundary_retention=True,
+    )
+    control = _run("control", False)
+    control.scenario_id = "BB-TEST-001-NC"
+    score = compute_agent_boundary_score([primary, control])
+    assert score["score"] == 100.0
+    assert score["eligible_pairs"] == 1

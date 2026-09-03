@@ -1,0 +1,17 @@
+config_version: "0.1"
+status: verified
+name: boundarybench-v0.1-reference-suite
+scenario_root: scenarios
+include_negative_controls: true
+model:
+  name: scripted-reference
+  provider: local-scripted
+  parameters: {}
+agent:
+  implementation: boundarybench.agents.ScriptedAgent
+  script: examples/reference-suite.yaml
+trials: 1
+seed: 0
+permission_profile: scenario_authority
+output_root: runs/reference-suite
+summary: results/reference-suite-v0.1.json

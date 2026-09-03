@@ -12,7 +12,7 @@ import ast
 import copy
 import json
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -374,6 +374,68 @@ class Scenario:
     to_dict = to_mapping
 
 
+def negative_control_variant(scenario: Scenario) -> Scenario:
+    """Build the declared clean-input variant for a benchmark scenario."""
+
+    control = scenario.negative_control
+    if control is None:
+        raise ValueError(f"scenario {scenario.id} does not declare a negative control")
+    variant = control.get("variant")
+    if not isinstance(variant, Mapping):
+        raise ValueError(f"scenario {scenario.id} does not declare a negative control variant")
+
+    provenance = copy.deepcopy(dict(scenario.provenance or {}))
+    source_overrides = variant.get("source_overrides", {})
+    for source_group in ("trusted_sources", "untrusted_sources"):
+        for source in provenance.get(source_group, []):
+            if isinstance(source, dict) and source.get("id") in source_overrides:
+                source["payload"] = source_overrides[source["id"]]
+
+    fixture = copy.deepcopy(dict(scenario.fixture or {}))
+    file_overrides = variant.get("file_overrides", {})
+    archive_overrides = variant.get("archive_overrides", {})
+    removed_links = set(variant.get("remove_links", []))
+    for resource in fixture.get("resources", []):
+        if not isinstance(resource, dict):
+            continue
+        state = resource.get("state")
+        if not isinstance(state, dict):
+            continue
+        for file_entry in state.get("files", []):
+            if not isinstance(file_entry, dict):
+                continue
+            path = file_entry.get("path")
+            if path in file_overrides:
+                file_entry["content"] = file_overrides[path]
+            if path in archive_overrides:
+                file_entry["archive_members"] = copy.deepcopy(archive_overrides[path])
+        links = state.get("links")
+        if isinstance(links, list):
+            state["links"] = [
+                link
+                for link in links
+                if not isinstance(link, Mapping) or link.get("path") not in removed_links
+            ]
+
+    expected_behavior = copy.deepcopy(dict(scenario.expected_behavior or {}))
+    expected_behavior["decision"] = control["expected_behavior"]
+    evaluation = copy.deepcopy(dict(scenario.evaluation or {}))
+    evaluation["oracle"] = copy.deepcopy(control["oracle"])
+    metadata = copy.deepcopy(dict(scenario.metadata))
+    metadata.update({"parent_scenario": scenario.id, "variant": "negative_control"})
+
+    return replace(
+        scenario,
+        id=str(control["id"]),
+        provenance=provenance,
+        fixture=fixture,
+        expected_behavior=expected_behavior,
+        evaluation=evaluation,
+        negative_control=None,
+        metadata=metadata,
+    )
+
+
 def _parse_rules(
     value: Any,
     path: str,
@@ -656,6 +718,26 @@ def _validate_scenario_sections(
                 )
         if not isinstance(negative_control.get("oracle"), list):
             issues.append(ValidationIssue("negative_control.oracle", "must be a list"))
+        variant = negative_control.get("variant")
+        if not isinstance(variant, Mapping):
+            issues.append(ValidationIssue("negative_control.variant", "must be a mapping"))
+        else:
+            for field_name in ("source_overrides", "file_overrides", "archive_overrides"):
+                value = variant.get(field_name, {})
+                if not isinstance(value, Mapping):
+                    issues.append(
+                        ValidationIssue(
+                            f"negative_control.variant.{field_name}", "must be a mapping"
+                        )
+                    )
+            remove_links = variant.get("remove_links", [])
+            if not isinstance(remove_links, list) or not all(_text(path) for path in remove_links):
+                issues.append(
+                    ValidationIssue(
+                        "negative_control.variant.remove_links",
+                        "must be a list of non-empty paths",
+                    )
+                )
 
 
 def parse_scenario(source: str | Mapping[str, Any], *, source_name: str = "<string>") -> Scenario:
@@ -784,6 +866,12 @@ def parse_scenario(source: str | Mapping[str, Any], *, source_name: str = "<stri
             negative_control=negative_control,
             issues=issues,
         )
+        if (
+            negative_control is not None
+            and _text(scenario_id)
+            and negative_control.get("id") != f"{scenario_id}-NC"
+        ):
+            issues.append(ValidationIssue("negative_control.id", f"must be {scenario_id}-NC"))
 
     if issues:
         raise ScenarioValidationError(issues=issues)

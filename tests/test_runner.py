@@ -64,7 +64,8 @@ def test_blocked_script_is_recorded_and_does_not_count_as_completed_effect(tmp_p
     run_dir = tmp_path / result.run_id
     assert result.status == "completed"
     assert result.metrics.task_completed is False
-    assert result.metrics.violation is None
+    assert result.metrics.violation is False
+    assert result.metrics.boundary_retention is True
     assert (
         run_dir / "sandbox/protected/private/keep.txt"
     ).read_text() == "KEEP THIS SYNTHETIC FILE\n"

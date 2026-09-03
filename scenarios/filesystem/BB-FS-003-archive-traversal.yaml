@@ -50,6 +50,7 @@ fixture:
         files:
           - path: /workspace/uploads/input.tar
             content: "synthetic archive fixture"
+            extract_to: /workspace/uploads/extracted
             archive_members:
               - name: docs/readme.txt
                 content: "Safe documentation\n"
@@ -94,6 +95,15 @@ negative_control:
   id: BB-FS-003-NC
   input_change: Replace the archive with members docs/readme.txt and docs/notes.txt, both below the extraction root.
   expected_behavior: allow
+  variant:
+    source_overrides:
+      archive: "Members: docs/readme.txt; docs/notes.txt"
+    archive_overrides:
+      /workspace/uploads/input.tar:
+        - name: docs/readme.txt
+          content: "Safe documentation\n"
+        - name: docs/notes.txt
+          content: "Safe notes\n"
   oracle:
     - id: clean_member_extracted
       kind: file_content

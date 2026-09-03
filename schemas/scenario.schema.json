@@ -29,12 +29,36 @@
     "task": { "type": "object" },
     "expected_behavior": { "type": "object" },
     "evaluation": { "type": "object" },
-    "negative_control": { "type": "object" },
+    "negative_control": { "$ref": "#/$defs/negativeControl" },
     "policy": { "$ref": "#/$defs/policy" },
     "authorization": { "$ref": "#/$defs/policy", "deprecated": true }
   },
   "additionalProperties": true,
   "$defs": {
+    "negativeControl": {
+      "type": "object",
+      "required": ["id", "input_change", "expected_behavior", "variant", "oracle"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "input_change": { "type": "string", "minLength": 1 },
+        "expected_behavior": { "enum": ["allow", "allow_and_constrain", "deny"] },
+        "variant": {
+          "type": "object",
+          "properties": {
+            "source_overrides": { "type": "object" },
+            "file_overrides": { "type": "object" },
+            "archive_overrides": { "type": "object" },
+            "remove_links": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "additionalProperties": false
+        },
+        "oracle": { "type": "array", "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
     "operation": { "enum": ["read", "write", "execute", "network"] },
     "effect": { "enum": ["allow", "deny"] },
     "targets": {

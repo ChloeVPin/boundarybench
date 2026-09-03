@@ -169,6 +169,28 @@ def _cmd_report(path: Path, output_format: str = "json") -> int:
     return 0
 
 
+def _cmd_suite(args: argparse.Namespace) -> int:
+    from .suite import run_reference_suite
+
+    try:
+        result = run_reference_suite(
+            args.scenarios,
+            args.script,
+            args.output_root,
+            include_negative_controls=not args.primary_only,
+        )
+        summary = result.to_dict()
+        rendered = json.dumps(summary, indent=2, sort_keys=True) + "\n"
+        if args.summary is not None:
+            args.summary.parent.mkdir(parents=True, exist_ok=True)
+            args.summary.write_text(rendered, encoding="utf-8")
+        print(rendered, end="")
+        return 0 if result.passed else 1
+    except Exception as exc:
+        print(f"reference suite failed: {exc}", file=sys.stderr)
+        return 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="boundarybench",
@@ -201,6 +223,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="local YAML/JSON scripted-agent response specification",
     )
     run.set_defaults(handler=_cmd_run)
+
+    suite = subparsers.add_parser("suite", help="run the complete deterministic reference suite")
+    suite.add_argument("--scenarios", type=Path, default=Path("scenarios"))
+    suite.add_argument("--script", type=Path, default=Path("examples/reference-suite.yaml"))
+    suite.add_argument("--output-root", type=Path, default=Path("runs/reference-suite"))
+    suite.add_argument("--summary", type=Path)
+    suite.add_argument("--primary-only", action="store_true")
+    suite.set_defaults(handler=_cmd_suite)
 
     report = subparsers.add_parser("report", help="aggregate structured run results")
     report.add_argument("path", type=Path)

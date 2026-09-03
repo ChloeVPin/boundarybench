@@ -1,8 +1,8 @@
 """Agent interfaces and the deterministic local scripted adapter.
 
-The benchmark intentionally knows nothing about model providers.  Providers can
-implement :class:`Agent`; the scripted adapter is the only implementation
-included in the core package.
+The benchmark intentionally knows nothing about model providers. Providers
+implement :class:`Agent`, while the core package includes a deterministic
+scripted reference adapter.
 """
 
 from __future__ import annotations
@@ -73,7 +73,7 @@ class AgentResponse:
 
 
 class Agent(Protocol):
-    """Minimal adapter contract for a future local or hosted model provider."""
+    """Minimal adapter contract for a local or hosted model provider."""
 
     @property
     def name(self) -> str: ...
@@ -127,6 +127,12 @@ class ScriptedAgent:
     def name(self) -> str:
         return self._name
 
+    @property
+    def complete_effect_trace(self) -> bool:
+        """Declare that the local script enumerates every attempted effect."""
+
+        return True
+
     def run(self, request: AgentRequest) -> AgentResponse:
         selected = self._select_script(request)
         response_options: Mapping[str, Any] = {}
@@ -157,6 +163,10 @@ class ScriptedAgent:
         for key in (request.scenario_id, request.attack_variant, "default"):
             if key is not None and key in self._script:
                 return self._script[key]
+        if request.scenario_id.endswith("-NC"):
+            parent_id = request.scenario_id.removesuffix("-NC")
+            if parent_id in self._script:
+                return self._script[parent_id]
         return []
 
     @staticmethod

@@ -2,7 +2,15 @@ import json
 import unittest
 from pathlib import Path
 
-from boundarybench import ScenarioValidationError, parse_scenario
+import yaml
+from jsonschema import Draft202012Validator
+
+from boundarybench import (
+    ScenarioValidationError,
+    load_scenario,
+    negative_control_variant,
+    parse_scenario,
+)
 
 
 class ScenarioParsingTests(unittest.TestCase):
@@ -53,3 +61,33 @@ experiment:
         self.assertEqual(schema["$schema"], "https://json-schema.org/draft/2020-12/schema")
         self.assertIn("authority", schema["$defs"])
         self.assertIn("policy", schema["$defs"])
+
+    def test_every_corpus_scenario_matches_the_published_json_schema(self):
+        schema = json.loads(Path("schemas/scenario.schema.json").read_text(encoding="utf-8"))
+        validator = Draft202012Validator(schema)
+        for path in sorted(Path("scenarios").rglob("*.yaml")):
+            with self.subTest(path=path):
+                document = yaml.safe_load(path.read_text(encoding="utf-8"))
+                errors = sorted(validator.iter_errors(document), key=lambda error: list(error.path))
+                self.assertEqual(errors, [])
+
+    def test_every_corpus_scenario_builds_a_clean_negative_control(self):
+        files = sorted(Path("scenarios").rglob("*.yaml"))
+        self.assertEqual(len(files), 11)
+        for path in files:
+            with self.subTest(path=path):
+                scenario = load_scenario(path)
+                control = negative_control_variant(scenario)
+                self.assertEqual(control.id, f"{scenario.id}-NC")
+                self.assertEqual(control.metadata["parent_scenario"], scenario.id)
+                self.assertIsNone(control.negative_control)
+
+    def test_archive_negative_control_removes_traversal_member(self):
+        scenario = load_scenario("scenarios/filesystem/BB-FS-003-archive-traversal.yaml")
+        control = negative_control_variant(scenario)
+        files = control.fixture["resources"][0]["state"]["files"]
+        archive = next(item for item in files if item["path"].endswith("input.tar"))
+        self.assertEqual(
+            [member["name"] for member in archive["archive_members"]],
+            ["docs/readme.txt", "docs/notes.txt"],
+        )

@@ -113,6 +113,21 @@ def _fixture_setup(
                     if isinstance(content, bytes)
                     else content
                 )
+                archive_members = item.get("archive_members")
+                if archive_members is not None:
+                    if not isinstance(archive_members, list) or not all(
+                        isinstance(member, Mapping) for member in archive_members
+                    ):
+                        raise ValueError("fixture archive_members must be a list of mappings")
+                    extract_to = item.get("extract_to")
+                    if not isinstance(extract_to, str):
+                        raise ValueError("fixture archives require an extract_to path")
+                    tool_state.setdefault("archive_members", {})[item["path"]] = tuple(
+                        dict(member) for member in archive_members
+                    )
+                    tool_state.setdefault("approved_extractions", []).append(
+                        (item["path"], extract_to)
+                    )
         raw_directories = state.get("directories")
         if raw_directories is not None:
             if not isinstance(raw_directories, list):
@@ -191,6 +206,15 @@ def _scenario_tool_policy(scenario: Any, tool_state: Mapping[str, Any]) -> Any:
         if isinstance(tool_state.get("documents"), Mapping)
         else ()
     )
+    approved_moves: set[tuple[str, str]] = set()
+    authority = _value(scenario, "authority")
+    grants = _value(authority, "grants", ()) if authority is not None else ()
+    for grant in grants:
+        action = _value(grant, "action")
+        resource = _value(grant, "resource")
+        if action == "move" and isinstance(resource, str) and " -> " in resource:
+            source, destination = resource.split(" -> ", 1)
+            approved_moves.add((source.strip(), destination.strip()))
     return AuthorizationPolicy(
         read_areas=frozenset(AREAS if allow_read else ()),
         write_areas=frozenset(AREAS if allow_write else ()),
@@ -198,6 +222,11 @@ def _scenario_tool_policy(scenario: Any, tool_state: Mapping[str, Any]) -> Any:
         approved_commands=frozenset(approved_commands if allow_execute else ()),
         query_endpoints=frozenset(str(item) for item in query_endpoints),
         send_endpoints=frozenset(str(item) for item in send_endpoints),
+        approved_moves=frozenset(approved_moves),
+        approved_extractions=frozenset(
+            tuple(item) for item in tool_state.get("approved_extractions", ())
+        ),
+        archive_members=dict(tool_state.get("archive_members", {})),
     )
 
 
@@ -323,6 +352,8 @@ class BenchmarkRunner:
                 "tool_names": [
                     "read",
                     "write",
+                    "move",
+                    "extract_archive",
                     "list",
                     "run_approved_command",
                     "query_doc",
@@ -358,6 +389,7 @@ class BenchmarkRunner:
             "attack_variant": attack_variant,
             "position": position,
             "agent": getattr(self.agent, "name", type(self.agent).__name__),
+            "complete_effect_trace": bool(getattr(self.agent, "complete_effect_trace", False)),
             "agent_implementation": (
                 f"{type(self.agent).__module__}.{type(self.agent).__qualname__}"
             ),
@@ -475,6 +507,7 @@ class BenchmarkRunner:
                 events,
                 declaration,
                 response=response,
+                complete_trace=bool(getattr(self.agent, "complete_effect_trace", False)),
             )
             evaluation_result = type(evaluation_result)(
                 metrics=evaluation_result.metrics,
@@ -640,6 +673,8 @@ class BenchmarkRunner:
             "read_file": tools.read_file,
             "write": tools.write,
             "write_file": tools.write_file,
+            "move": tools.move,
+            "extract_archive": tools.extract_archive,
             "list": tools.list,
             "list_files": tools.list_files,
             "run_approved_command": tools.run_approved_command,
@@ -1094,12 +1129,11 @@ def run_scenario(
     script: Any = None,
     agent: Any = None,
 ) -> list[Any]:
-    """Small library hook for integrations such as the optional CLI.
+    """Run one scenario through the provider neutral benchmark interface.
 
-    Loading a scenario is deliberately lazy.  If no agent is supplied, the
-    local scripted adapter is the only bundled execution path.  Without a
-    script it emits no events, producing unknown metrics rather than pretending
-    that a model ran.
+    Loading is lazy so callers can supply either a path or a validated scenario.
+    The deterministic scripted adapter is selected by default. Provider adapters
+    can be supplied through the ``agent`` argument.
     """
 
     source_path: Path | None = None

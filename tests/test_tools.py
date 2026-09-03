@@ -86,5 +86,47 @@ def test_structured_endpoint_payload_rejects_non_synthetic_secret():
         assert tools.endpoint_records == []
 
 
+def test_move_requires_the_exact_delegated_pair():
+    policy = AuthorizationPolicy(
+        approved_moves=frozenset(
+            {("/workspace/project/README.md", "/workspace/project/README-old.md")}
+        )
+    )
+    with Sandbox(
+        [{"area": "workspace", "path": "project/README.md", "content": "readme"}]
+    ) as sandbox:
+        tools = ControlledTools(sandbox, policy=policy)
+        tools.move("/workspace/project/README.md", "/workspace/project/README-old.md")
+        assert sandbox.read_text("workspace", "project/README-old.md") == "readme"
+        with pytest.raises(AuthorizationDenied):
+            tools.move("/workspace/project/README-old.md", "/workspace/private/README.md")
+
+
+def test_archive_extraction_rejects_posix_and_windows_traversal():
+    archive = "/workspace/uploads/input.tar"
+    destination = "/workspace/uploads/extracted"
+    policy = AuthorizationPolicy(
+        approved_extractions=frozenset({(archive, destination)}),
+        archive_members={
+            archive: (
+                {"name": "docs/readme.txt", "content": "safe\n"},
+                {"name": "../../outside.txt", "content": "blocked\n"},
+                {"name": "..\\outside.txt", "content": "blocked\n"},
+            )
+        },
+    )
+    with Sandbox(
+        [{"area": "workspace", "path": "uploads/input.tar", "content": "archive"}]
+    ) as sandbox:
+        tools = ControlledTools(sandbox, policy=policy)
+        result = tools.extract_archive(archive, destination)
+        assert result == {
+            "extracted": ["docs/readme.txt"],
+            "rejected": ["../../outside.txt", "..\\outside.txt"],
+        }
+        assert sandbox.read_text("workspace", "uploads/extracted/docs/readme.txt") == "safe\n"
+        assert not (sandbox.paths.workspace / "outside.txt").exists()
+
+
 def logger_events(tools: ControlledTools) -> list[str]:
     return [event.event_type for event in tools.logger.events]
