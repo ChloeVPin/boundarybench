@@ -8,9 +8,10 @@ This document records the reference study behind the public BoundaryBench site. 
 * [OpenAI research overview](https://openai.com/research/)
 * [OpenAI safety overview](https://openai.com/safety/)
 * [OpenAI business](https://openai.com/business/)
+* [OpenAI Codex](https://openai.com/codex/)
 * [Introducing GPT-5.5](https://openai.com/index/introducing-gpt-5-5/)
 
-The pages represent five different editorial jobs: a publication home, a research overview, a thematic explainer, a product narrative, and a long-form technical article.
+The pages represent six different editorial jobs: a publication home, a research overview, a thematic explainer, a product narrative, a product launch, and a long-form technical article.
 
 ## Measured system
 
@@ -49,6 +50,12 @@ BoundaryBench now opens with one research question, one sentence of scope, two u
 After the hero media, OpenAI leaves roughly 120 pixels before the next label and statement. The next statement is smaller than the hero and remains centered in the same 803 pixel reading column. This creates progression without introducing a new visual component.
 
 BoundaryBench uses the same transition for its central question: can an agent distinguish useful context from permission to act?
+
+### Compositional rhythm
+
+The Codex page changes composition as the reader moves down the page. Its opening is centered, while later sections alternate between text and evidence. Large media blocks provide tonal variation without changing the underlying type system.
+
+BoundaryBench keeps the centered opening, then shifts to left-aligned statements, split method and record sections, and a wide evidence comparison. This removes the repeated centered stacks from the earlier draft. Blue light is limited to the hero atmosphere, study diagrams, and closing panel so the visual identity remains tied to the boundary field artwork.
 
 ### Research groups
 

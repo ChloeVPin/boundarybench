@@ -44,18 +44,22 @@
 
         <figure class="hero-media">
           <img src="assets/boundary-field.png" alt="Luminous paths meeting a transparent boundary in a dark field" />
+          <figcaption>
+            <span>Authorization Decay Surface</span>
+            <span>Synthetic fixtures with deterministic oracles</span>
+          </figcaption>
         </figure>
       </section>
 
       <section class="statement" id="research">
-        <div class="reading-column">
+        <div class="site-frame statement-layout">
           <p class="kicker">Research question</p>
           <h2>Can an agent distinguish useful context from permission to act?</h2>
         </div>
       </section>
 
       <section class="topic-section" aria-labelledby="pressure-title">
-        <div class="reading-column section-heading">
+        <div class="site-frame section-heading section-heading-wide">
           <h2 id="pressure-title">Three sources of pressure</h2>
           <p>The task stays fixed while one part of the surrounding context changes.</p>
         </div>
@@ -112,42 +116,45 @@
       </section>
 
       <section class="topic-section" id="method" aria-labelledby="method-title">
-        <div class="reading-column section-heading">
-          <h2 id="method-title">A controlled study of authority under pressure</h2>
-          <p>Every attack condition has a matched clean control. Task completion and authorization preservation are scored separately.</p>
-        </div>
+        <div class="site-frame split-layout">
+          <div class="section-heading section-heading-left">
+            <p class="kicker">Method</p>
+            <h2 id="method-title">A controlled study of authority under pressure</h2>
+            <p>Every attack condition has a matched clean control. Task completion and authorization preservation are scored separately.</p>
+          </div>
 
-        <div class="data-table reading-column" role="table" aria-label="BoundaryBench study design">
-          <div class="data-row data-header" role="row">
-            <span role="columnheader">Measure</span>
-            <span role="columnheader">Count</span>
-            <span role="columnheader">Purpose</span>
-          </div>
-          <div class="data-row" role="row">
-            <span role="cell">Primary scenarios</span>
-            <strong role="cell">11</strong>
-            <span role="cell">Filesystem, repository, tool, and control boundaries</span>
-          </div>
-          <div class="data-row" role="row">
-            <span role="cell">Conditions per scenario</span>
-            <strong role="cell">27</strong>
-            <span role="cell">A 3 by 3 by 3 factorial design</span>
-          </div>
-          <div class="data-row" role="row">
-            <span role="cell">Controlled cases</span>
-            <strong role="cell">594</strong>
-            <span role="cell">Matched attack and clean-control trajectories</span>
-          </div>
-          <div class="data-row" role="row">
-            <span role="cell">Preregistered cases</span>
-            <strong role="cell">35,640</strong>
-            <span role="cell">Three model tiers and two intervention arms</span>
+          <div class="data-table" role="table" aria-label="BoundaryBench study design">
+            <div class="data-row data-header" role="row">
+              <span role="columnheader">Measure</span>
+              <span role="columnheader">Count</span>
+              <span role="columnheader">Purpose</span>
+            </div>
+            <div class="data-row" role="row">
+              <span role="cell">Primary scenarios</span>
+              <strong role="cell">11</strong>
+              <span role="cell">Filesystem, repository, tool, and control boundaries</span>
+            </div>
+            <div class="data-row" role="row">
+              <span role="cell">Conditions per scenario</span>
+              <strong role="cell">27</strong>
+              <span role="cell">A 3 by 3 by 3 factorial design</span>
+            </div>
+            <div class="data-row" role="row">
+              <span role="cell">Controlled cases</span>
+              <strong role="cell">594</strong>
+              <span role="cell">Matched attack and clean-control trajectories</span>
+            </div>
+            <div class="data-row" role="row">
+              <span role="cell">Preregistered cases</span>
+              <strong role="cell">35,640</strong>
+              <span role="cell">Three model tiers and two intervention arms</span>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="topic-section" id="evidence" aria-labelledby="evidence-title">
-        <div class="reading-column section-heading">
+        <div class="site-frame section-heading evidence-intro">
           <h2 id="evidence-title">The outcome matters more than the explanation</h2>
           <p>BoundaryBench records requested effects, attempted effects, completed effects, task completion, and unknown observations as separate evidence.</p>
         </div>
@@ -169,32 +176,35 @@
       </section>
 
       <section class="record-section" id="record" aria-labelledby="record-title">
-        <div class="reading-column section-heading">
-          <h2 id="record-title">Public research record</h2>
-          <p>The repository is the canonical source for the study, protocol, results, and citation.</p>
-        </div>
+        <div class="site-frame record-layout">
+          <div class="section-heading section-heading-left">
+            <p class="kicker">Open record</p>
+            <h2 id="record-title">Public research record</h2>
+            <p>The repository is the canonical source for the study, protocol, results, and citation.</p>
+          </div>
 
-        <div class="record-list reading-column">
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">
-            <span>Research record</span>
-            <span>Scope, hypotheses, and artifact map</span>
-            <span>RESEARCH.md</span>
-          </a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/preregistered-study.md">
-            <span>Preregistered study</span>
-            <span>Estimands, exclusions, stopping rules, and budget</span>
-            <span>Protocol</span>
-          </a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/results/authorization-decay-surface-v0.2.json">
-            <span>Conformance result</span>
-            <span>594 deterministic runs with oracle evidence</span>
-            <span>JSON</span>
-          </a>
-          <a href="https://github.com/ChloeVPin/boundarybench/blob/main/CITATION.cff">
-            <span>Citation</span>
-            <span>Machine-readable project metadata</span>
-            <span>CITATION.cff</span>
-          </a>
+          <div class="record-list">
+            <a href="https://github.com/ChloeVPin/boundarybench/blob/main/RESEARCH.md">
+              <span>Research record</span>
+              <span>Scope, hypotheses, and artifact map</span>
+              <span>RESEARCH.md</span>
+            </a>
+            <a href="https://github.com/ChloeVPin/boundarybench/blob/main/docs/preregistered-study.md">
+              <span>Preregistered study</span>
+              <span>Estimands, exclusions, stopping rules, and budget</span>
+              <span>Protocol</span>
+            </a>
+            <a href="https://github.com/ChloeVPin/boundarybench/blob/main/results/authorization-decay-surface-v0.2.json">
+              <span>Conformance result</span>
+              <span>594 deterministic runs with oracle evidence</span>
+              <span>JSON</span>
+            </a>
+            <a href="https://github.com/ChloeVPin/boundarybench/blob/main/CITATION.cff">
+              <span>Citation</span>
+              <span>Machine-readable project metadata</span>
+              <span>CITATION.cff</span>
+            </a>
+          </div>
         </div>
       </section>
 
