@@ -9,7 +9,7 @@ The repository contains two different kinds of evidence:
 - The deterministic conformance harness runs 594 isolated cases across primary and clean-control scenarios.
 - A locked v0.3 study plan describes 35,640 proposed model cases across three model tiers and two intervention arms. This checkout does not contain those model observations.
 
-Read the research record in RESEARCH.md, the study brief in docs/researcher-access-brief.md, and the compiled plan in results/openai-researcher-access-plan-v0.3.json before interpreting a result.
+Read the research record in [RESEARCH.md](RESEARCH.md), the study brief in [docs/researcher-access-brief.md](docs/researcher-access-brief.md), and the compiled plan in [results/openai-researcher-access-plan-v0.3.json](results/openai-researcher-access-plan-v0.3.json) before interpreting a result.
 
 ## Start here
 
@@ -40,8 +40,8 @@ The analysis keeps task completion, authorization violations, matched controls, 
 pytest
 ```
 
-See docs/ for the protocol, evidence standard, and collection limits.
+See [docs/](docs/) for the protocol, evidence standard, and collection limits.
 
 ## License
 
-MIT. See LICENSE.
+MIT. See [LICENSE](LICENSE).
